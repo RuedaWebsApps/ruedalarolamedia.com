@@ -29,8 +29,10 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
   // Listen for clicks on the 8 Salient fancy_box cards in #servicios
   useEffect(() => {
     const onSelectService = (e: Event) => {
-      const custom = e as CustomEvent<string>;
-      const svc = custom.detail;
+      const custom = e as CustomEvent<string | { label: string; focus?: boolean }>;
+      const payload = custom.detail;
+      const svc = typeof payload === 'string' ? payload : payload?.label;
+      const shouldFocus = typeof payload === 'string' ? true : Boolean(payload?.focus);
       if (svc) {
         setSelectedServiceLabel(svc);
         setFormData((prev) => ({
@@ -42,9 +44,11 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
             ? `Hola, me interesa cotizar el servicio de ${svc}. `
             : `Hi, I would like to inquire about ${svc}. `,
         }));
-        window.setTimeout(() => {
-          nameInputRef.current?.focus();
-        }, 450);
+        if (shouldFocus) {
+          window.setTimeout(() => {
+            nameInputRef.current?.focus({ preventScroll: true });
+          }, 450);
+        }
       }
     };
 

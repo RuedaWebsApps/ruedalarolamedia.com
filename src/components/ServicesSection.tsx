@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Language } from '../types';
 import { servicesEn, servicesEs } from '../content/siteContent';
+import { getServiceLandingUrl } from '../content/serviceLandings';
 
 interface ServicesSectionProps {
   lang: Language;
@@ -322,21 +323,15 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ lang }) => {
           </p>
         </div>
 
-        {/* 4x2 Grid of Salient fancy_box (box_style="color_box_hover") Cards — Clickable to #formulario */}
+        {/* 4x2 Grid of Salient fancy_box (box_style="color_box_hover") Cards — Clickable to Dedicated Service Landing Pages */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-[26px]">
           {services.map((service, index) => {
             const colDelay = (index % 4) * 80;
+            const landingUrl = getServiceLandingUrl(service.id, lang);
             return (
               <a
                 key={service.id}
-                href="#formulario"
-                onClick={() => {
-                  if (typeof window !== 'undefined') {
-                    window.dispatchEvent(
-                      new CustomEvent('rlr:select-service', { detail: service.title })
-                    );
-                  }
-                }}
+                href={landingUrl}
                 style={{ transitionDelay: `${colDelay}ms` }}
                 className={`group salient-fancy-box min-h-[340px] lg:min-h-[354px] p-8 lg:p-[36px] flex flex-col justify-between cursor-pointer salient-fade-bottom ${
                   visible ? 'is-visible' : ''
@@ -355,7 +350,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ lang }) => {
                 <div className="fancy-box-content pt-1 flex items-start justify-between">
                   <IconsmindSvg name={service.iconName} gradId={`svc-grad-${service.id}`} />
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-dm text-[11px] font-semibold uppercase tracking-wider text-white/90 border border-white/40 rounded-full px-3 py-1">
-                    {isEs ? 'Cotizar →' : 'Inquire →'}
+                    {isEs ? 'Ver Servicio →' : 'Explore →'}
                   </span>
                 </div>
 

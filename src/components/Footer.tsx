@@ -94,34 +94,57 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
           </div>
 
-          {/* Column 2: Services List (Fixed "Merchadesign" spelling) */}
+          {/* Column 2: Services List (Linked to Dedicated Service Landing Pages) */}
           <div className="lg:p-[5%] font-dm text-[15px] leading-[28px] text-white">
             <p className="font-bold text-white mb-1">
               {isEs ? 'Servicios' : 'Services'}
             </p>
             <ul className="space-y-0.5 text-white">
               <li>
-                <a href={isEs ? '/es#servicios' : '/#servicios'} className="hover:underline">
+                <a
+                  href={isEs ? '/es/servicios/wraps-vehiculares' : '/services/vehicle-wraps'}
+                  className="hover:underline font-medium"
+                >
+                  {isEs ? 'Wraps Vehiculares & Alta Gama' : 'Vehicle & Exotic Wraps'}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={isEs ? '/es/servicios/diseno-de-marca' : '/services/brand-design'}
+                  className="hover:underline"
+                >
                   {isEs ? 'Diseño de marca' : 'Brand Design'}
                 </a>
               </li>
               <li>
-                <a href={isEs ? '/es#servicios' : '/#servicios'} className="hover:underline">
+                <a
+                  href={isEs ? '/es/servicios/diseno-web' : '/services/web-design'}
+                  className="hover:underline"
+                >
                   {isEs ? 'Diseño web' : 'Web Design'}
                 </a>
               </li>
               <li>
-                <a href={isEs ? '/es#servicios' : '/#servicios'} className="hover:underline">
+                <a
+                  href={isEs ? '/es/servicios/merchadesign' : '/services/merchadesign'}
+                  className="hover:underline"
+                >
                   Merchadesign
                 </a>
               </li>
               <li>
-                <a href={isEs ? '/es#servicios' : '/#servicios'} className="hover:underline">
+                <a
+                  href={isEs ? '/es/servicios/branding' : '/services/branding'}
+                  className="hover:underline"
+                >
                   Branding
                 </a>
               </li>
               <li>
-                <a href={isEs ? '/es#servicios' : '/#servicios'} className="hover:underline">
+                <a
+                  href={isEs ? '/es/servicios/marketing-digital' : '/services/digital-marketing'}
+                  className="hover:underline"
+                >
                   {isEs ? 'Marketing digital' : 'Digital Marketing'}
                 </a>
               </li>

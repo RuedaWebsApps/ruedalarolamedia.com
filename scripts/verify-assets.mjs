@@ -3,39 +3,25 @@ import path from 'path';
 
 const distDir = path.resolve('dist');
 
-const htmlFiles = [
-  'index.html',
-  'es/index.html',
-  'contact/index.html',
-  'contacto/index.html',
-  'blog/index.html',
-  'es/blog/index.html',
-  'portfolio/logos-design/index.html',
-  'es/portfolio/logos-design/index.html',
-  'portfolio/luminara/index.html',
-  'es/portfolio/luminara/index.html',
-  'portfolio/astralis/index.html',
-  'es/portfolio/astralis/index.html',
-  'portfolio/spectral/index.html',
-  'es/portfolio/spectral/index.html',
-  'privacy/index.html',
-  'es/privacidad/index.html',
-  'terms/index.html',
-  'es/terminos/index.html',
-  'cookies/index.html',
-  'es/cookies/index.html',
-  'accessibility/index.html',
-  'es/accesibilidad/index.html',
-];
+function findHtmlFiles(dir, base = '') {
+  const results = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const rel = base ? `${base}/${entry.name}` : entry.name;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...findHtmlFiles(full, rel));
+    } else if (entry.name.endsWith('.html')) {
+      results.push(rel);
+    }
+  }
+  return results;
+}
 
+const htmlFiles = findHtmlFiles(distDir);
 let allAssets = new Set();
 
 for (const file of htmlFiles) {
   const filePath = path.join(distDir, file);
-  if (!fs.existsSync(filePath)) {
-    console.error(`[MISSING HTML] ${file}`);
-    process.exit(1);
-  }
   const content = fs.readFileSync(filePath, 'utf-8');
   const matches = content.matchAll(/(?:src|href|content)="(\/(?:images|assets|favicon|apple-touch|manifest)[^"]*)"/g);
   for (const m of matches) {

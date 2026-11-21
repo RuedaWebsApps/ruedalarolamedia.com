@@ -37,6 +37,150 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://ruedalarolamedia.com/services/vehicle-wraps</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/vehicle-wraps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/wraps-vehiculares"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/vehicle-wraps"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/servicios/wraps-vehiculares</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/vehicle-wraps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/wraps-vehiculares"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/vehicle-wraps"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/services/brand-design</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/brand-design"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/diseno-de-marca"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/brand-design"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/servicios/diseno-de-marca</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/brand-design"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/diseno-de-marca"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/brand-design"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/services/web-design</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/web-design"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/diseno-web"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/web-design"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/servicios/diseno-web</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/web-design"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/diseno-web"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/web-design"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/services/merchadesign</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/merchadesign"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/merchadesign"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/merchadesign"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/servicios/merchadesign</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/merchadesign"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/merchadesign"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/merchadesign"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/services/branding</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/branding"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/branding"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/branding"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/servicios/branding</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/branding"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/branding"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/branding"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/services/motion-graphics</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/motion-graphics"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/animacion-motion-graphics"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/motion-graphics"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/servicios/animacion-motion-graphics</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/motion-graphics"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/animacion-motion-graphics"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/motion-graphics"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/services/digital-marketing</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/digital-marketing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/marketing-digital"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/digital-marketing"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/servicios/marketing-digital</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/digital-marketing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/marketing-digital"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/digital-marketing"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/services/public-relations</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/public-relations"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/relaciones-publicas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/public-relations"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/servicios/relaciones-publicas</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/services/public-relations"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/servicios/relaciones-publicas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/services/public-relations"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://ruedalarolamedia.com/blog</loc>
     <lastmod>2026-11-20</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog"/>
@@ -51,6 +195,78 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/blog/exotic-car-wrap-trends-2026</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog/exotic-car-wrap-trends-2026"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog/exotic-car-wrap-trends-2026"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog/exotic-car-wrap-trends-2026"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/blog/exotic-car-wrap-trends-2026</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog/exotic-car-wrap-trends-2026"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog/exotic-car-wrap-trends-2026"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog/exotic-car-wrap-trends-2026"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/blog/vehicle-wraps-austin-roi</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog/vehicle-wraps-austin-roi"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog/vehicle-wraps-austin-roi"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog/vehicle-wraps-austin-roi"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/blog/vehicle-wraps-austin-roi</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog/vehicle-wraps-austin-roi"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog/vehicle-wraps-austin-roi"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog/vehicle-wraps-austin-roi"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/blog/brand-identity-vs-logo</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog/brand-identity-vs-logo"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog/brand-identity-vs-logo"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog/brand-identity-vs-logo"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/blog/brand-identity-vs-logo</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog/brand-identity-vs-logo"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog/brand-identity-vs-logo"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog/brand-identity-vs-logo"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/blog/high-performance-web-design-2026</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog/high-performance-web-design-2026"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog/high-performance-web-design-2026"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog/high-performance-web-design-2026"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ruedalarolamedia.com/es/blog/high-performance-web-design-2026</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ruedalarolamedia.com/blog/high-performance-web-design-2026"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ruedalarolamedia.com/es/blog/high-performance-web-design-2026"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ruedalarolamedia.com/blog/high-performance-web-design-2026"/>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

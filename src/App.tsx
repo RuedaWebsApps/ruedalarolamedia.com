@@ -2,7 +2,9 @@ import React from 'react';
 import { HomePage } from './pages/HomePage';
 import { ContactPage } from './pages/ContactPage';
 import { BlogPage } from './pages/BlogPage';
+import { BlogPostDetailPage } from './pages/BlogPostDetailPage';
 import { PortfolioDetailPage } from './pages/PortfolioDetailPage';
+import { ServiceLandingPage } from './pages/ServiceLandingPage';
 import { LegalPage } from './pages/LegalPage';
 import { CookieBanner } from './components/CookieBanner';
 import { resolveLegalRoute } from './legal/legalDocs';
@@ -72,7 +74,45 @@ export const App: React.FC<AppProps> = ({ initialPath }) => {
     );
   }
 
-  // 4. Blog routes (/blog & /es/blog)
+  // 4. Dedicated Service Landing Pages (/services/[slug] & /es/servicios/[slug])
+  if (cleanPath.startsWith('/es/servicios/')) {
+    const slug = cleanPath.replace('/es/servicios/', '');
+    return (
+      <>
+        <ServiceLandingPage slug={slug} lang="es" />
+        <CookieBanner lang="es" />
+      </>
+    );
+  }
+  if (cleanPath.startsWith('/services/')) {
+    const slug = cleanPath.replace('/services/', '');
+    return (
+      <>
+        <ServiceLandingPage slug={slug} lang="en" />
+        <CookieBanner lang="en" />
+      </>
+    );
+  }
+
+  // 5. Blog Detail & Index routes (/blog, /es/blog, /blog/[slug], /es/blog/[slug])
+  if (cleanPath.startsWith('/es/blog/')) {
+    const slug = cleanPath.replace('/es/blog/', '');
+    return (
+      <>
+        <BlogPostDetailPage slug={slug} lang="es" />
+        <CookieBanner lang="es" />
+      </>
+    );
+  }
+  if (cleanPath.startsWith('/blog/')) {
+    const slug = cleanPath.replace('/blog/', '');
+    return (
+      <>
+        <BlogPostDetailPage slug={slug} lang="en" />
+        <CookieBanner lang="en" />
+      </>
+    );
+  }
   if (cleanPath === '/es/blog') {
     return (
       <>
@@ -90,7 +130,7 @@ export const App: React.FC<AppProps> = ({ initialPath }) => {
     );
   }
 
-  // 5. Portfolio routes (/portfolio/[slug] & /es/portfolio/[slug])
+  // 6. Portfolio routes (/portfolio/[slug] & /es/portfolio/[slug])
   if (cleanPath.startsWith('/es/portfolio/')) {
     const slug = cleanPath.replace('/es/portfolio/', '');
     return (

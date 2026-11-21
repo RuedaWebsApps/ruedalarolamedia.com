@@ -96,16 +96,33 @@ export const WrapBanner: React.FC<WrapBannerProps> = ({ lang }) => {
           </p>
         </div>
 
-        {/* Centered Wrap Vehicle Image (40% desktop, 50% tablet, 60% mobile, border-radius: 20px) */}
-        <div className="relative z-20 flex justify-center mt-2">
-          <div className="w-[65%] sm:w-[50%] lg:w-[40%] rounded-[20px] overflow-hidden">
+        {/* Centered Wrap Vehicle Image (40% desktop, 50% tablet, 60% mobile, border-radius: 20px) + Direct Link to Wrap Atelier Landing */}
+        <div className="relative z-20 flex flex-col items-center mt-2">
+          <a
+            href={isEs ? '/es/servicios/wraps-vehiculares' : '/services/vehicle-wraps'}
+            className="group w-[65%] sm:w-[50%] lg:w-[40%] rounded-[20px] overflow-hidden block"
+          >
             <img
               src="/images/carro-wrap.webp"
               alt="Rueda La Rola Media Commercial Vehicle Wrap"
               width={720}
               height={480}
-              className="w-full h-auto object-contain rounded-[20px] block mx-auto"
+              className="w-full h-auto object-contain rounded-[20px] block mx-auto transition-transform duration-500 group-hover:scale-105"
             />
+          </a>
+
+          <div className="mt-6">
+            <a
+              href={isEs ? '/es/servicios/wraps-vehiculares' : '/services/vehicle-wraps'}
+              className="inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-white text-[#6a35ff] font-dm text-[13px] font-bold uppercase tracking-[1.2px] hover:bg-[#141c27] hover:text-white transition-colors shadow-lg"
+            >
+              <span>
+                {isEs
+                  ? 'Explorar Estudio de Wraps (Alta Gama y Flotas)'
+                  : 'Explore Wrap Studio (Exotics & Commercial Fleets)'}
+              </span>
+              <span aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
       </div>
