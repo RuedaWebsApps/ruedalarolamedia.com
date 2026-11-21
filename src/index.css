@@ -3,39 +3,257 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 
   body {
-    background-color: #0b0f17;
-    color: #f3f4f6;
+    background-color: #000000;
+    color: #0a0a0a;
     overflow-x: hidden;
   }
 }
 
-/* Custom glow and brand accents */
-.bg-gradient-brand {
-  background: linear-gradient(135deg, #6a35ff 0%, #ec186a 100%);
+.font-gloock {
+  font-family: 'Gloock', Georgia, serif;
 }
 
-.text-gradient-brand {
-  background: linear-gradient(135deg, #a78bfa 0%, #f43f86 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.font-dm {
+  font-family: 'DM Sans', sans-serif;
 }
 
-.text-gradient-purple {
-  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.font-josefin {
+  font-family: 'Josefin Sans', sans-serif;
 }
 
-.border-brand-glow {
-  box-shadow: 0 0 25px -5px rgba(106, 53, 255, 0.25);
+.font-inter {
+  font-family: 'Inter', sans-serif;
 }
 
-.border-magenta-glow {
-  box-shadow: 0 0 25px -5px rgba(236, 24, 106, 0.25);
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 1. Salient Header Entrance Animation (Slide down on initial page load without white gap) */
+@keyframes salientHeaderSlideDown {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-salient-header {
+  animation: salientHeaderSlideDown 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* 2. Salient Nectar Text Reveal Button (Vertical duplicate text slide on hover) */
+.nectar-text-reveal-link {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.35;
+}
+
+.nectar-text-reveal-link .nectar-text-inner {
+  display: block;
+  position: relative;
+  transition: transform 0.38s cubic-bezier(0.2, 0.85, 0.4, 1);
+}
+
+.nectar-text-reveal-link .nectar-text-inner::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  color: #ffffff;
+}
+
+.nectar-text-reveal-link:hover .nectar-text-inner {
+  transform: translate3d(0, -100%, 0);
+}
+
+/* 3. Slider Revolution 7 3D Entrance Animations */
+@keyframes revLogo3DIn {
+  0% {
+    opacity: 0;
+    transform: perspective(900px) translate3d(180px, 130px, -240px) rotateY(38deg) rotateX(12deg) scale(1.38);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(900px) translate3d(0, 0, 0) rotateY(0deg) rotateX(0deg) scale(1);
+  }
+}
+
+.animate-rev-logo-3d {
+  animation: revLogo3DIn 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
+@keyframes revCollage3DIn {
+  0% {
+    opacity: 0;
+    transform: perspective(1200px) translate3d(80px, 55px, -220px) rotateX(9deg) rotateY(-14deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1200px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1);
+  }
+}
+
+.animate-rev-collage-3d {
+  animation: revCollage3DIn 1.05s cubic-bezier(0.19, 1, 0.22, 1) 0.08s both;
+}
+
+@keyframes revLineClipReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 105%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-rev-line-1 {
+  animation: revLineClipReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+.animate-rev-line-2 {
+  animation: revLineClipReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.animate-rev-line-3 {
+  animation: revLineClipReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+
+@keyframes revFadeUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-rev-fade-1 {
+  animation: revFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+.animate-rev-fade-2 {
+  animation: revFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
+}
+
+/* 4. Salient Fancy Box Hover (color_box_hover with extra-color-gradient-1) */
+.salient-fancy-box {
+  position: relative;
+  overflow: hidden;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition:
+    border-color 0.45s cubic-bezier(0.25, 1, 0.25, 1),
+    box-shadow 0.45s cubic-bezier(0.25, 1, 0.25, 1),
+    transform 0.45s cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+.salient-fancy-box .fancy-box-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.01);
+  transition:
+    opacity 0.48s cubic-bezier(0.25, 1, 0.25, 1),
+    transform 0.65s cubic-bezier(0.25, 1, 0.25, 1);
+  z-index: 1;
+}
+
+.salient-fancy-box .fancy-box-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(216, 22, 132, 0.88) 0%, rgba(96, 49, 138, 0.93) 100%);
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.25, 1, 0.25, 1);
+  z-index: 2;
+}
+
+.salient-fancy-box:hover {
+  border-color: transparent;
+  box-shadow: 0 28px 60px rgba(96, 49, 138, 0.32);
+}
+
+.salient-fancy-box:hover .fancy-box-bg {
+  opacity: 1;
+  transform: scale(1.09);
+}
+
+.salient-fancy-box:hover .fancy-box-overlay {
+  opacity: 1;
+}
+
+.salient-fancy-box .fancy-box-content {
+  position: relative;
+  z-index: 3;
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+.salient-fancy-box:hover .fancy-box-content {
+  transform: translate3d(0, -4px, 0);
+}
+
+/* 5. Salient 3D Flip-In-Vertical Entrance for #Nosotros columns */
+.salient-flip-vertical {
+  opacity: 0;
+  transform: perspective(1200px) rotateY(26deg) translate3d(0, 20px, -30px);
+  transform-origin: 50% 50%;
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.85, 0.4, 1),
+    transform 0.7s cubic-bezier(0.2, 0.85, 0.4, 1);
+}
+
+.salient-flip-vertical.is-visible {
+  opacity: 1;
+  transform: perspective(1200px) rotateY(0deg) translate3d(0, 0, 0);
+}
+
+/* 6. Salient Fade-In-From-Bottom Entrance */
+.salient-fade-bottom {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  transition:
+    opacity 0.65s cubic-bezier(0.25, 1, 0.35, 1),
+    transform 0.65s cubic-bezier(0.25, 1, 0.35, 1);
+}
+
+.salient-fade-bottom.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* 7. Flickity Continuous Ticker Marquee */
+@keyframes flickityTicker {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-flickity-ticker {
+  display: flex;
+  width: max-content;
+  animation: flickityTicker 28s linear infinite;
+}
+
+.animate-flickity-ticker:hover {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Language } from '../types';
-import { Sparkles, Target, Zap, HeartHandshake, ArrowRight } from 'lucide-react';
 
 interface DualFeatureSectionProps {
   lang: Language;
@@ -8,128 +7,124 @@ interface DualFeatureSectionProps {
 
 export const DualFeatureSection: React.FC<DualFeatureSectionProps> = ({ lang }) => {
   const isEs = lang === 'es';
-  const sectionId = isEs ? 'nosotros' : 'about';
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.18 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section id={sectionId} className="py-20 lg:py-28 bg-[#0b0f17] relative scroll-mt-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs sm:text-sm font-semibold mb-4">
-            <Sparkles className="w-4 h-4 text-[#ec186a]" />
-            <span>{isEs ? 'Quiénes Somos' : 'About Rueda La Rola Media'}</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            {isEs ? (
-              <>
-                Creatividad, estrategia y <span className="text-gradient-brand">compromiso</span> en cada proyecto
-              </>
-            ) : (
-              <>
-                Creativity, strategy, and <span className="text-gradient-brand">commitment</span> in every build
-              </>
-            )}
+    <section
+      id="Nosotros"
+      ref={sectionRef}
+      className="relative w-full bg-[#ffffff] py-[8vw] px-6 sm:px-10 lg:px-[90px] scroll-mt-[90px] lg:scroll-mt-[136px]"
+    >
+      <div id="nosotros" className="sr-only" aria-hidden="true" />
+      <div id="about" className="sr-only" aria-hidden="true" />
+
+      <div className="max-w-[1260px] mx-auto grid grid-cols-1 lg:grid-cols-2 items-stretch">
+        {/* Left Column: Deep Purple #60318a with 3D flip-in-vertical entrance */}
+        <div
+          style={{ transitionDelay: '0ms' }}
+          className={`bg-[#60318a] text-white p-10 sm:p-14 lg:p-[11%] flex flex-col justify-center salient-flip-vertical ${
+            visible ? 'is-visible' : ''
+          }`}
+        >
+          <h5 className="font-dm text-[14px] font-medium text-white mb-[15px]">
+            {isEs ? 'Servicio' : 'Service'}
+          </h5>
+
+          <h2 className="font-gloock text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.14] text-white font-normal mb-[22px]">
+            {isEs ? 'Innovación y creatividad' : 'Innovation and creativity'}
           </h2>
+
+          <p className="font-dm text-[15px] sm:text-[16px] leading-[28px] text-white/95 font-normal mb-[36px]">
+            {isEs
+              ? 'Los servicios de relaciones públicas pueden aportar ideas y puntos de vista que quizás no hayas tenido en cuenta. Esto te puede ayudar a destacar entre otras empresas. Una perspectiva fresca puede marcar la diferencia en tu comunicación de marketing y en la dirección que tu organización decida tomar.'
+              : 'Public relations services can provide ideas and points of view that you might not have considered. This can help you stand out among other companies. A fresh perspective can make a difference in your marketing communication and the direction your organization decides to take.'}
+          </p>
+
+          <div>
+            <a
+              href="#formulario"
+              className="group inline-flex items-center gap-3 font-dm text-[14px] font-bold text-white"
+            >
+              <span>{isEs ? 'Más información' : 'Learn more'}</span>
+              <span className="w-[24px] h-[24px] rounded-full border border-white/60 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1.5 group-hover:border-white">
+                <svg
+                  viewBox="0 0 12 12"
+                  className="w-2.5 h-2.5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                >
+                  <path d="M4.5 2.5L8 6L4.5 9.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </a>
+          </div>
         </div>
 
-        {/* Dual Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          {/* Card 1: Deep Violet Card (#5b238c) */}
-          <div className="relative rounded-3xl p-8 sm:p-10 lg:p-12 bg-gradient-to-br from-[#5b238c] via-[#481d70] to-[#2e1047] border border-purple-400/20 shadow-2xl shadow-purple-950/60 flex flex-col justify-between overflow-hidden group">
-            {/* Subtle background glow */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#ec186a]/15 rounded-full blur-3xl pointer-events-none" />
+        {/* Right Column: Pure White #ffffff with x_large_depth shadow & #60318a text, 3D flip-in-vertical (200ms delay) */}
+        <div
+          style={{
+            transitionDelay: '200ms',
+            boxShadow: '0 30px 80px rgba(0, 0, 0, 0.13)',
+          }}
+          className={`bg-[#ffffff] text-[#60318a] p-10 sm:p-14 lg:p-[11%] flex flex-col justify-center relative z-10 salient-flip-vertical ${
+            visible ? 'is-visible' : ''
+          }`}
+        >
+          <h5
+            className="font-dm text-[14px] font-medium mb-[15px]"
+            style={{ color: isEs ? '#ff3a6f' : '#60318a' }}
+          >
+            {isEs ? 'Quienes somos' : 'Who we are'}
+          </h5>
 
-            <div>
-              <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white mb-6">
-                <Target className="w-7 h-7 text-pink-300" />
-              </div>
+          <h2 className="font-gloock text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.14] text-[#60318a] font-normal mb-[22px]">
+            {isEs
+              ? 'Impulsamos tu visión hasta convertirla en triunfo'
+              : 'We drive your vision until it turns into a triumph'}
+          </h2>
 
-              <span className="text-xs font-bold uppercase tracking-widest text-pink-300">
-                {isEs ? 'Nuestra Visión' : 'Our Creative Vision'}
+          <p className="font-dm text-[15px] sm:text-[16px] leading-[28px] text-[#60318a] font-normal mb-[36px]">
+            {isEs
+              ? 'En Rueda La Rola Media, nuestro compromiso va más allá de ofrecer servicios; se trata de construir relaciones de confianza y crear soluciones que realmente impulsen a nuestros clientes. Sabemos que cada proyecto es único, por eso escuchamos, planeamos y trabajamos contigo en cada etapa, asegurándonos de que los resultados no solo cumplan, sino que superen tus expectativas.'
+              : "At Rueda La Rola Media, our commitment goes beyond offering services; it's about building trust-based relationships and creating solutions that truly drive our clients forward. We understand that every project is unique, which is why we listen, plan, and work with you at every stage, ensuring that results not only meet but exceed your expectations."}
+          </p>
+
+          <div>
+            <a
+              href="#formulario"
+              className="group inline-flex items-center gap-3 font-dm text-[14px] font-bold text-[#60318a]"
+            >
+              <span>{isEs ? 'Más información' : 'Learn more'}</span>
+              <span className="w-[24px] h-[24px] rounded-full border border-[#60318a]/50 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1.5 group-hover:border-[#60318a]">
+                <svg
+                  viewBox="0 0 12 12"
+                  className="w-2.5 h-2.5 text-[#60318a]"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                >
+                  <path d="M4.5 2.5L8 6L4.5 9.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </span>
-
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-2 leading-tight">
-                {isEs
-                  ? 'Diseño que no solo se ve bien: vende, comunica y posiciona.'
-                  : 'Design engineered not just to look good: it sells, speaks, and scales.'}
-              </h3>
-
-              <p className="mt-4 text-base sm:text-lg text-purple-100/90 leading-relaxed">
-                {isEs
-                  ? 'En Rueda La Rola Media transformamos tus ideas en realidad. Desde el diseño integral de tu marca hasta soluciones digitales y físicas, ¡tenemos todo lo que necesitas para destacar en el competitivo mercado de Texas y Estados Unidos!'
-                  : 'At Rueda La Rola Media, we turn ideas into reality. From comprehensive brand development to modern digital platforms and high-impact physical wraps, we equip your business with everything needed to stand out and dominate.'}
-              </p>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-white/15 grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-3xl font-black text-white">100%</p>
-                <p className="text-xs text-purple-200 uppercase tracking-wider font-semibold">
-                  {isEs ? 'Personalizado' : 'Custom Tailored'}
-                </p>
-              </div>
-              <div>
-                <p className="text-3xl font-black text-pink-300">Austin, TX</p>
-                <p className="text-xs text-purple-200 uppercase tracking-wider font-semibold">
-                  {isEs ? 'Sede Central' : 'Headquarters'}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2: Modern Dark / High-Contrast Card */}
-          <div className="relative rounded-3xl p-8 sm:p-10 lg:p-12 bg-[#141c27] border border-white/10 shadow-2xl flex flex-col justify-between overflow-hidden group hover:border-purple-500/40 transition-all">
-            {/* Ambient accent */}
-            <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#6a35ff]/10 rounded-full blur-3xl pointer-events-none" />
-
-            <div>
-              <div className="w-14 h-14 rounded-2xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-[#ec186a] mb-6">
-                <HeartHandshake className="w-7 h-7" />
-              </div>
-
-              <span className="text-xs font-bold uppercase tracking-widest text-purple-400">
-                {isEs ? 'Compromiso & Alianzas' : 'Commitment & Partnership'}
-              </span>
-
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-2 leading-tight">
-                {isEs
-                  ? 'Un equipo dedicado que acompaña el crecimiento de tu marca.'
-                  : 'A dedicated creative partner aligned with your long-term growth.'}
-              </h3>
-
-              <div className="mt-6 space-y-4 text-sm sm:text-base text-gray-300 leading-relaxed">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-purple-900/50 flex items-center justify-center text-purple-300 shrink-0 mt-0.5">
-                    <Zap className="w-3.5 h-3.5" />
-                  </div>
-                  <p>
-                    {isEs
-                      ? 'Atención ágil y directa: sin intermediarios burocráticos. Hablamos de tu negocio, entendemos tus retos y entregamos soluciones.'
-                      : 'Direct and agile communication without bureaucratic delays. We understand your market, identify challenges, and deliver high-impact results.'}
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-pink-900/50 flex items-center justify-center text-pink-300 shrink-0 mt-0.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                  </div>
-                  <p>
-                    {isEs
-                      ? 'Integración total físico-digital: tu logotipo, uniformes, wraps vehiculares y sitio web se alinean con absoluta consistencia visual.'
-                      : 'Seamless physical-digital harmony: your logo, merchandise, vehicle wraps, and web presence maintain flawless brand consistency.'}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-              <a
-                href={isEs ? '#formulario' : '#contact'}
-                className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-purple-400 hover:text-white transition-colors"
-              >
-                <span>{isEs ? 'Hablemos de tu proyecto' : "Let's talk about your project"}</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
+            </a>
           </div>
         </div>
       </div>

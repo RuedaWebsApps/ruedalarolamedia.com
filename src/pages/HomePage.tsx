@@ -18,7 +18,7 @@ export const HomePage: React.FC<HomePageProps> = ({ lang }) => {
   const currentPath = lang === 'es' ? '/es' : '/';
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0b0f17] text-white">
+    <div className="min-h-screen flex flex-col bg-[#ffffff] text-[#000000]">
       <Navbar lang={lang} currentPath={currentPath} />
       <main id="main" className="flex-grow">
         <HeroSection lang={lang} />

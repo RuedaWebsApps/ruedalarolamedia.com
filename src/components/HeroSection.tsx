@@ -1,149 +1,289 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Language } from '../types';
-import { Sparkles, ArrowRight, ShieldCheck, Award, Zap, Phone } from 'lucide-react';
-import { siteMetadata } from '../content/siteContent';
 
 interface HeroSectionProps {
   lang: Language;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
-  const isEs = lang === 'es';
+export const HeroSection: React.FC<HeroSectionProps> = () => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
+
+  // Interactive 3D Low-Poly ParticleWave Canvas (Slider Revolution 7 tp-particlewave replica)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId = 0;
+    let width = (canvas.width = canvas.offsetWidth || 1440);
+    let height = (canvas.height = canvas.offsetHeight || 790);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = canvas.offsetWidth || window.innerWidth;
+      height = canvas.height = canvas.offsetHeight || 790;
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    const cols = 22;
+    const rows = 14;
+
+    // Floating ambient particles
+    const dots = Array.from({ length: 36 }, (_, i) => ({
+      x: ((i * 97) % 100) / 100,
+      y: ((i * 53) % 100) / 100,
+      r: 0.8 + (i % 3) * 0.6,
+      speed: 0.00018 + (i % 5) * 0.00007,
+      alpha: 0.15 + (i % 4) * 0.1,
+    }));
+
+    const render = (time: number) => {
+      const t = time * 0.0012;
+      ctx.clearRect(0, 0, width, height);
+
+      // Base radial gradient matching RevSlider bg: radial-gradient(circle, rgba(66,20,74,1) 0%, rgba(21,2,24,1) 100%)
+      const baseGrad = ctx.createRadialGradient(
+        width * 0.28,
+        height * 0.45,
+        20,
+        width * 0.35,
+        height * 0.5,
+        width * 0.75
+      );
+      baseGrad.addColorStop(0, '#42144a');
+      baseGrad.addColorStop(0.55, '#1d0724');
+      baseGrad.addColorStop(1, '#141c27');
+      ctx.fillStyle = baseGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Build 3D low-poly terrain vertices
+      const cellW = (width * 1.25) / (cols - 1);
+      const cellH = (height * 0.92) / (rows - 1);
+      const offsetX = -width * 0.12;
+      const offsetY = height * 0.18;
+
+      const pts: { x: number; y: number; z: number }[][] = [];
+      for (let r = 0; r < rows; r++) {
+        const rowPts: { x: number; y: number; z: number }[] = [];
+        const depthFactor = 0.55 + (r / rows) * 0.65;
+        for (let c = 0; c < cols; c++) {
+          const wave1 = Math.sin(c * 0.42 + t * 1.35 + r * 0.32) * 26;
+          const wave2 = Math.cos(r * 0.55 - t * 1.05 + c * 0.22) * 18;
+          const z = wave1 + wave2;
+          const x = offsetX + c * cellW + Math.sin(r * 0.4 + t) * 12;
+          const y = offsetY + r * cellH * depthFactor + z * depthFactor;
+          rowPts.push({ x, y, z });
+        }
+        pts.push(rowPts);
+      }
+
+      // Draw faceted low-poly triangles with dynamic specular shading
+      for (let r = 0; r < rows - 1; r++) {
+        for (let c = 0; c < cols - 1; c++) {
+          const p00 = pts[r][c];
+          const p10 = pts[r][c + 1];
+          const p01 = pts[r + 1][c];
+          const p11 = pts[r + 1][c + 1];
+
+          // Triangle 1
+          const shade1 = (p00.z + p10.z + p01.z) / 130;
+          const lum1 = Math.max(0.04, Math.min(0.32, 0.13 + shade1 * 0.16));
+          ctx.beginPath();
+          ctx.moveTo(p00.x, p00.y);
+          ctx.lineTo(p10.x, p10.y);
+          ctx.lineTo(p01.x, p01.y);
+          ctx.closePath();
+          ctx.fillStyle = `rgba(${Math.round(92 + shade1 * 70)}, ${Math.round(
+            26 + shade1 * 30
+          )}, ${Math.round(135 + shade1 * 80)}, ${lum1.toFixed(3)})`;
+          ctx.fill();
+          ctx.strokeStyle = `rgba(165, 95, 225, ${(lum1 * 0.38).toFixed(3)})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+
+          // Triangle 2
+          const shade2 = (p10.z + p11.z + p01.z) / 130;
+          const lum2 = Math.max(0.03, Math.min(0.28, 0.11 + shade2 * 0.15));
+          ctx.beginPath();
+          ctx.moveTo(p10.x, p10.y);
+          ctx.lineTo(p11.x, p11.y);
+          ctx.lineTo(p01.x, p01.y);
+          ctx.closePath();
+          ctx.fillStyle = `rgba(${Math.round(70 + shade2 * 65)}, ${Math.round(
+            22 + shade2 * 25
+          )}, ${Math.round(115 + shade2 * 75)}, ${lum2.toFixed(3)})`;
+          ctx.fill();
+          ctx.strokeStyle = `rgba(140, 80, 200, ${(lum2 * 0.32).toFixed(3)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+
+      // Draw subtle floating luminous particles
+      for (const d of dots) {
+        const py = ((d.y - time * d.speed) % 1 + 1) % 1;
+        const px = (d.x + Math.sin(t + d.x * 10) * 0.015 + 1) % 1;
+        ctx.beginPath();
+        ctx.arc(px * width * 0.65, py * height, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220, 180, 255, ${d.alpha})`;
+        ctx.fill();
+      }
+
+      animationFrameId = window.requestAnimationFrame(render);
+    };
+
+    animationFrameId = window.requestAnimationFrame(render);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = sectionRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const normX = (e.clientX - rect.left) / rect.width - 0.5;
+    const normY = (e.clientY - rect.top) / rect.height - 0.5;
+    setParallax({ x: normX, y: normY });
+  };
+
+  const handleMouseLeave = () => {
+    setParallax({ x: 0, y: 0 });
+  };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#0b0f17] via-[#120f24] to-[#0b0f17] pt-8 pb-16 lg:pt-16 lg:pb-24">
-      {/* Background ambient lighting glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-600/12 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/3 right-10 w-[340px] h-[340px] bg-pink-600/10 rounded-full blur-3xl pointer-events-none" />
+    <section
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      aria-label="Hero"
+      className="relative w-full min-h-[680px] lg:h-[790px] bg-[#141c27] text-white overflow-hidden select-none"
+    >
+      {/* 1. Interactive 3D Low-Poly ParticleWave Background Canvas */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Left Column: Headings, Badge, CTAs */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
-            {/* Top pill badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-200 text-xs sm:text-sm font-semibold shadow-inner">
-              <span className="flex h-2 w-2 rounded-full bg-[#ec186a]" />
-              <span>
-                {isEs ? 'Agencia Creativa & Especialistas en Wrap' : 'Creative Agency & Vehicle Wrap Specialists'}
+      {/* 2. Top Purple Promo Bar (Layer 18 & 25: height 34px, solid dark base + rgba(106, 53, 255, 0.52)) */}
+      <div className="relative z-30 w-full h-[34px] bg-[#141c27]">
+        <div
+          className="w-full h-full flex items-center justify-center px-4 text-center"
+          style={{ backgroundColor: 'rgba(106, 53, 255, 0.52)' }}
+        >
+          <p className="font-poppins text-[11px] sm:text-[12px] leading-[15px] text-white tracking-wide">
+            Somos el equipo creativo que tu negocio necesita.
+          </p>
+        </div>
+      </div>
+
+      {/* 3. Right Tilted Portfolio Collage with 3D Entrance + Mouse Parallax (Layer 27: imagerola.png) */}
+      <div
+        className="absolute right-[-8%] sm:right-[-4%] lg:left-[38%] lg:right-auto top-[34px] w-[95%] sm:w-[78%] lg:w-[1005px] h-[820px] pointer-events-none z-10 animate-rev-collage-3d"
+      >
+        <div
+          className="w-full h-full transition-transform duration-300 ease-out"
+          style={{
+            transform: `perspective(1200px) translate3d(${(parallax.x * -24).toFixed(1)}px, ${(
+              parallax.y * -18
+            ).toFixed(1)}px, 0px) rotateX(${(parallax.y * 2.5).toFixed(2)}deg) rotateY(${(
+              parallax.x * -2.5
+            ).toFixed(2)}deg)`,
+          }}
+        >
+          <img
+            src="/images/hero-collage.webp"
+            alt="Rueda La Rola Media Creative Portfolio Collage"
+            width={1005}
+            height={853}
+            fetchPriority="high"
+            className="w-full h-full object-contain object-right-top opacity-95"
+          />
+        </div>
+      </div>
+
+      {/* 4. Top & Bottom Navy Scrims (Layers 21, 30, 33: #141c27 gradient blends) */}
+      <div
+        className="
+          pointer-events-none absolute top-[34px] right-0 w-full lg:w-[70%] h-[115px] z-[15]
+          bg-gradient-to-b from-[#141c27] via-[#141c27]/60 to-transparent
+        "
+      />
+      <div
+        className="
+          pointer-events-none absolute bottom-0 inset-x-0 h-[320px] z-[15]
+          bg-gradient-to-t from-[#141c27] via-[#141c27]/90 to-transparent
+        "
+      />
+
+      {/* 5. Main Hero Content Container (1440px max width matching RevSlider grid) */}
+      <div className="relative z-20 max-w-[1440px] mx-auto h-[calc(100%-34px)] min-h-[646px] lg:h-[756px] px-6 sm:px-12 lg:px-[70px] flex flex-col justify-between pt-5 pb-12 lg:pb-14">
+        {/* Top-Left 3D Animated Vinyl Logo (Layer 0: logo.png) */}
+        <div className="pt-1 sm:pt-2">
+          <a
+            href="#servicios"
+            aria-label="Rueda La Rola Media"
+            className="inline-block animate-rev-logo-3d"
+          >
+            <img
+              src="/images/logo.webp"
+              alt="Rueda La Rola Media Vinyl Logo"
+              width={136}
+              height={136}
+              className="w-[105px] h-[105px] sm:w-[132px] sm:h-[132px] object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.55)]"
+            />
+          </a>
+        </div>
+
+        {/* Bottom Overlay Row: Left Giant Gloock Title + VER SERVICIOS | Right Inter Manifesto + PORTAFOLIO ↘ */}
+        <div className="w-full flex flex-col lg:flex-row lg:items-end justify-between gap-10 lg:gap-8 mt-auto pt-24">
+          {/* Bottom-Left Column */}
+          <div className="max-w-[720px]">
+            <h1 className="font-gloock uppercase text-white text-[46px] sm:text-[68px] lg:text-[84px] xl:text-[90px] leading-[1.0] tracking-normal">
+              <span className="block overflow-hidden pb-1">
+                <span className="block animate-rev-line-1">WE ARE A</span>
               </span>
-              <span className="text-white/40">&middot;</span>
-              <span className="text-[#ec186a] font-bold">Austin, TX</span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.08]">
-              {isEs ? (
-                <>
-                  Damos vida a tus <span className="text-gradient-brand">ideas</span> con impacto creativo real.
-                </>
-              ) : (
-                <>
-                  We bring your <span className="text-gradient-brand">vision</span> to life through creative impact.
-                </>
-              )}
+              <span className="block overflow-hidden pb-1">
+                <span className="block animate-rev-line-2">CREATIVE</span>
+              </span>
+              <span className="block overflow-hidden">
+                <span className="block animate-rev-line-3">AGENCY</span>
+              </span>
             </h1>
 
-            {/* Subheading */}
-            <p className="text-lg sm:text-xl text-gray-300 font-normal leading-relaxed max-w-2xl">
-              {isEs
-                ? 'Diseño de marca distintivo, rotulación vehicular comercial (wraps), desarrollo web de alto rendimiento y estrategias de marketing digital que aceleran tu crecimiento en Texas.'
-                : 'Distinctive brand design, high-grade commercial vehicle wraps, high-speed web development, and targeted digital marketing engineered to scale your business in Texas.'}
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto pt-2">
+            <div className="mt-7 lg:mt-9 animate-rev-fade-1">
               <a
-                href={isEs ? '#formulario' : '#contact'}
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 text-base font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#6a35ff] to-[#ec186a] hover:from-[#7c4dff] hover:to-[#f0327f] rounded-xl shadow-xl shadow-purple-600/30 hover:shadow-purple-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                href="#servicios"
+                className="inline-block font-josefin text-[13px] sm:text-[14px] font-normal uppercase tracking-[2px] text-white hover:text-white/80 transition-opacity"
               >
-                <Sparkles className="w-5 h-5" />
-                <span>{isEs ? 'Agendar Consulta' : 'Schedule Consultation'}</span>
-                <ArrowRight className="w-5 h-5 ml-1" />
+                VER SERVICIOS
               </a>
-
-              <a
-                href={`tel:${siteMetadata.phoneRaw}`}
-                className="inline-flex items-center justify-center gap-3 px-6 py-4 text-base font-semibold text-gray-200 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-purple-500/40 transition-all"
-              >
-                <Phone className="w-5 h-5 text-[#ec186a]" />
-                <span>{siteMetadata.phone}</span>
-              </a>
-            </div>
-
-            {/* Trust bullet badges */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/10 w-full">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-purple-400 shrink-0" />
-                <span className="text-xs sm:text-sm text-gray-300 font-medium">
-                  {isEs ? 'Vinil 3M/Avery Certificado' : 'Certified 3M/Avery Vinyl'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-pink-400 shrink-0" />
-                <span className="text-xs sm:text-sm text-gray-300 font-medium">
-                  {isEs ? '100+ Proyectos Exitosos' : '100+ Completed Projects'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-400 shrink-0" />
-                <span className="text-xs sm:text-sm text-gray-300 font-medium">
-                  {isEs ? 'Entrega Rápida & Garantía' : 'Fast Turnaround & Warranty'}
-                </span>
-              </div>
             </div>
           </div>
 
-          {/* Right Column: Angled Portfolio Collage Showcase */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
-            {/* Ambient turntable vinyl motif behind collage */}
-            <div className="absolute -top-6 -right-6 w-32 h-32 sm:w-44 sm:h-44 opacity-25 pointer-events-none" aria-hidden="true">
-              <img
-                src="/images/logo.webp"
-                alt=""
-                width={176}
-                height={176}
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-contain"
-              />
-            </div>
+          {/* Bottom-Right Column */}
+          <div className="flex flex-col items-start lg:items-end text-left lg:text-right max-w-[380px] lg:ml-auto">
+            <p className="font-inter text-[15px] sm:text-[16px] lg:text-[17px] leading-[25px] lg:leading-[26px] tracking-[0.9px] text-white/95 font-normal animate-rev-fade-1">
+              Creamos experiencias digitales que despiertan ambición, cautivan corazones conspiramos a favor de tus metas.
+            </p>
 
-            {/* Collage Container with tilt and elevation */}
-            <div className="relative w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden p-2 bg-gradient-to-tr from-[#6a35ff]/30 via-white/5 to-[#ec186a]/30 border border-white/10 shadow-2xl shadow-purple-950/80 group">
-              <div className="relative rounded-xl overflow-hidden bg-[#141c27] aspect-[4/3] sm:aspect-[16/11]">
-                <picture>
-                  <source media="(max-width: 640px)" srcSet="/images/hero-collage-mobile.webp" type="image/webp" />
-                  <img
-                    src="/images/hero-collage.webp"
-                    alt="Rueda La Rola Media - Client Work Showcase"
-                    width={1200}
-                    height={825}
-                    fetchPriority="high"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    loading="eager"
-                  />
-                </picture>
-
-                {/* Overlay badge on image */}
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-lg bg-black/80 backdrop-blur-md border border-white/15 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-widest text-purple-400 font-bold">
-                      {isEs ? 'Portafolio Reciente' : 'Recent Portfolio'}
-                    </p>
-                    <p className="text-sm font-semibold text-white">
-                      {isEs ? 'Diseño de Marca & Wraps' : 'Brand Identity & Commercial Wraps'}
-                    </p>
-                  </div>
-                  <a
-                    href={isEs ? '#portafolio' : '#portfolio'}
-                    className="px-3 py-1.5 text-xs font-bold text-white bg-[#6a35ff] hover:bg-[#7c4dff] rounded-md transition-colors"
-                  >
-                    {isEs ? 'Ver Todo' : 'View All'}
-                  </a>
-                </div>
-              </div>
-            </div>
+            <a
+              href="#portafolio"
+              className="mt-8 lg:mt-10 inline-flex items-center gap-3 font-josefin text-[16px] sm:text-[17px] font-semibold uppercase tracking-[1px] text-white hover:text-white/80 transition-transform duration-300 hover:translate-x-1 animate-rev-fade-2"
+            >
+              <span>PORTAFOLIO</span>
+              <span
+                aria-hidden="true"
+                className="inline-block text-[20px] leading-none font-light transform rotate-45"
+              >
+                →
+              </span>
+            </a>
           </div>
         </div>
       </div>

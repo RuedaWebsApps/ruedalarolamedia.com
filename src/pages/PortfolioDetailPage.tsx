@@ -1,9 +1,12 @@
 import React from 'react';
-import { Language, PortfolioItem } from '../types';
+import { Language } from '../types';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
-import { portfolioItems, portfolioItemsEs, showcaseLogoFiles } from '../content/siteContent';
-import { Sparkles, ArrowLeft, CheckCircle2, Calendar, User, Tag, ArrowRight } from 'lucide-react';
+import {
+  logofolioHeaderBanner,
+  logofolioBrandSections,
+  portfolioItems,
+} from '../content/siteContent';
 
 interface PortfolioDetailPageProps {
   slug: string;
@@ -12,205 +15,272 @@ interface PortfolioDetailPageProps {
 
 export const PortfolioDetailPage: React.FC<PortfolioDetailPageProps> = ({ slug, lang }) => {
   const isEs = lang === 'es';
-  const list = isEs ? portfolioItemsEs : portfolioItems;
-  const item: PortfolioItem | undefined = list.find((p) => p.slug === slug);
   const currentPath = isEs ? `/es/portfolio/${slug}` : `/portfolio/${slug}`;
+  const item = portfolioItems.find((p) => p.slug === slug);
 
-  if (!item) {
+  // 1. Exact 1:1 Layout for /portfolio/logos-design (WP Post ID 627)
+  if (slug === 'logos-design') {
     return (
-      <div className="min-h-screen flex flex-col bg-[#0b0f17] text-white">
+      <div className="min-h-screen flex flex-col bg-[#ffffff] text-[#000000]">
         <Navbar lang={lang} currentPath={currentPath} />
-        <main id="main" className="flex-grow flex items-center justify-center p-8 text-center">
-          <div>
-            <h1 className="text-3xl font-black mb-4">
-              {isEs ? 'Proyecto No Encontrado' : 'Project Not Found'}
-            </h1>
-            <p className="text-gray-400 mb-6">
-              {isEs ? 'El proyecto solicitado no existe.' : 'The requested project does not exist.'}
-            </p>
-            <a
-              href={isEs ? '/es#portafolio' : '/#portfolio'}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#6a35ff] to-[#ec186a] text-white font-bold"
-            >
-              {isEs ? 'Volver al Portafolio' : 'Back to Portfolio'}
-            </a>
-          </div>
+
+        <main id="main" className="flex-grow">
+          {/* Row 0: Full-Width LOGOFOLIO Vol. 1 Header Banner (image_url="646") */}
+          <section className="w-full bg-[#1a0b2e]">
+            <h1 className="sr-only">Logos design — Logofolio Vol. 1 Rueda La Rola Media</h1>
+            <img
+              src={logofolioHeaderBanner}
+              alt="Logofolio Vol. 1 — Rueda La Rola Media"
+              width={1920}
+              height={700}
+              fetchPriority="high"
+              className="w-full h-auto block"
+            />
+          </section>
+
+          {/* 9 Brand Showcase Sections + 4-Column Flickity Ticker Carousels */}
+          {logofolioBrandSections.map((brand, bIdx) => {
+            const tickerSlides = [
+              ...brand.carouselImages,
+              ...brand.carouselImages,
+            ];
+            const isFirst = bIdx === 0;
+
+            return (
+              <section key={brand.id} className="w-full overflow-hidden">
+                {/* Brand Banner Row with exact bg_color */}
+                <div
+                  className="w-full"
+                  style={{ backgroundColor: brand.bgColor }}
+                >
+                  <img
+                    src={brand.bannerImage}
+                    alt={`${brand.name} — Brand Identity Showcase`}
+                    width={1920}
+                    height={900}
+                    className="w-full max-w-[1600px] mx-auto h-auto block"
+                  />
+
+                  {/* In WP Post 627, row 1 (#dddcd3 Juan Peña) embeds its carousel inside the same #dddcd3 row */}
+                  {isFirst && (
+                    <div className="w-full overflow-hidden">
+                      <div className="animate-flickity-ticker flex items-center">
+                        {tickerSlides.map((imgSrc, sIdx) => (
+                          <div
+                            key={`${brand.id}-slide-${sIdx}`}
+                            className="w-[260px] sm:w-[320px] lg:w-[360px] shrink-0"
+                          >
+                            <img
+                              src={imgSrc}
+                              alt={`${brand.name} Application ${sIdx + 1}`}
+                              width={400}
+                              height={400}
+                              className="w-full h-auto block object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* For brands 2..9, the 4-col Flickity ticker carousel sits in its own full-width row */}
+                {!isFirst && (
+                  <div className="w-full bg-[#ffffff] overflow-hidden">
+                    <div className="animate-flickity-ticker flex items-center">
+                      {tickerSlides.map((imgSrc, sIdx) => (
+                        <div
+                          key={`${brand.id}-slide-${sIdx}`}
+                          className="w-[260px] sm:w-[320px] lg:w-[360px] shrink-0"
+                        >
+                          <img
+                            src={imgSrc}
+                            alt={`${brand.name} Application ${sIdx + 1}`}
+                            width={400}
+                            height={400}
+                            className="w-full h-auto block object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </section>
+            );
+          })}
         </main>
-        <Footer lang={lang} />
+
+        {/* Purple Footer + Salient "Explore More Work" + Giant "© — 2026" */}
+        <Footer
+          lang={lang}
+          showExploreMoreWork={true}
+          currentPortfolioSlug="logos-design"
+        />
       </div>
     );
   }
 
-  const isLogosDesign = item.slug === 'logos-design';
+  // 2. Exact 1:1 Layout for /portfolio/luminara (Innk - WP Post ID 33)
+  if (slug === 'luminara') {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#000000] text-white">
+        <Navbar lang={lang} currentPath={currentPath} />
 
-  return (
-    <div className="min-h-screen flex flex-col bg-[#0b0f17] text-white">
-      <Navbar lang={lang} currentPath={currentPath} />
-
-      <main id="main" className="flex-grow">
-        {/* Breadcrumb & Navigation */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-          <a
-            href={isEs ? '/es#portafolio' : '/#portfolio'}
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-purple-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>{isEs ? 'Volver a Portafolio' : 'Back to Portfolio'}</span>
-          </a>
-        </div>
-
-        {/* Project Header */}
-        <section className="py-12 lg:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-semibold">
-                <Sparkles className="w-4 h-4 text-[#ec186a]" />
-                <span>{item.category}</span>
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
-                {item.title}
+        <main id="main" className="flex-grow bg-[#000000]">
+          {/* Top Header Row (bg_color="#000000", top_padding="3em", bottom_padding="3em") */}
+          <section className="max-w-[1320px] mx-auto px-6 sm:px-10 lg:px-[90px] py-12 lg:py-16">
+            <div className="py-[5%] pr-0 lg:pr-[20%]">
+              <h1
+                className="font-gloock text-white font-normal"
+                style={{ fontSize: 'clamp(48px, 6vw, 104px)', lineHeight: 1.2 }}
+              >
+                Innk
               </h1>
+            </div>
 
-              <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
-                {item.summary}
-              </p>
-
-              {/* Project Meta Bar */}
-              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/10">
-                <div>
-                  <p className="text-xs text-gray-400 uppercase font-semibold flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-purple-400" />
-                    <span>{isEs ? 'Cliente' : 'Client'}</span>
-                  </p>
-                  <p className="text-sm font-bold text-white mt-1">{item.client}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400 uppercase font-semibold flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-[#ec186a]" />
-                    <span>{isEs ? 'Año' : 'Year'}</span>
-                  </p>
-                  <p className="text-sm font-bold text-white mt-1">{item.year}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400 uppercase font-semibold flex items-center gap-1.5">
-                    <Tag className="w-3.5 h-3.5 text-yellow-400" />
-                    <span>{isEs ? 'Área' : 'Scope'}</span>
-                  </p>
-                  <p className="text-sm font-bold text-white mt-1">{item.category}</p>
-                </div>
+            {/* Equal-Height Bottom-Aligned Meta Bar: Year | Client | Outlined Category Pill */}
+            <div className="grid grid-cols-2 lg:grid-cols-12 gap-6 items-end pt-4">
+              <div className="col-span-1 lg:col-span-3">
+                <h6 className="font-dm text-[12px] uppercase tracking-wider text-white/60 mb-1">
+                  Year
+                </h6>
+                <p className="font-dm text-[16px] text-white">2024</p>
               </div>
-            </div>
-
-            {/* Featured Image */}
-            <div className="lg:col-span-5">
-              <div className="rounded-3xl overflow-hidden bg-[#141c27] border border-white/15 shadow-2xl">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  width={800}
-                  height={550}
-                  className="w-full h-auto object-cover"
-                  loading="eager"
-                />
+              <div className="col-span-1 lg:col-span-3">
+                <h6 className="font-dm text-[12px] uppercase tracking-wider text-white/60 mb-1">
+                  Client
+                </h6>
+                <p className="font-dm text-[16px] text-white">Innk</p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Detailed Case Study Content */}
-        <section className="py-12 lg:py-20 bg-[#121724] border-y border-white/10">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                {isEs ? 'Resumen del Proyecto' : 'Project Overview'}
-              </h2>
-              <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
-                {item.description}
-              </p>
-            </div>
-
-            <div className="p-8 rounded-3xl bg-[#0b0f17] border border-white/10 shadow-xl space-y-4">
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-[#ec186a]" />
-                <span>{isEs ? 'Puntos Clave y Entregables' : 'Key Highlights & Deliverables'}</span>
-              </h3>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                {item.highlights.map((hl, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5 text-sm text-gray-300">
-                    <CheckCircle2 className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                    <span>{hl}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* If Logos Design, render the Client Logos Grid Showcase */}
-        {isLogosDesign && (
-          <section className="py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#ec186a]">
-                {isEs ? 'GALERÍA DE MARCAS' : 'BRAND GALLERY'}
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
-                {isEs ? 'Logotipos Creados Para Nuestros Clientes' : 'Corporate Emblems & Logos Created'}
-              </h2>
-              <p className="mt-3 text-base text-gray-300">
-                {isEs
-                  ? 'Cada marca fue diseñada con precisión vectorial para garantizar impacto en impresos, uniformes, sitios web y rotulación vehicular.'
-                  : 'Every logo is crafted in high-precision vector formats to ensure supreme fidelity across physical embroidery, digital screens, and vehicle wraps.'}
-              </p>
-            </div>
-
-            {/* Showcase Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-              {showcaseLogoFiles.map((logo, i) => (
-                <div
-                  key={logo.src}
-                  className="aspect-square rounded-2xl bg-[#141c27] border border-white/10 hover:border-purple-500/50 p-4 flex items-center justify-center transition-all group"
-                >
-                  <img
-                    src={logo.src}
-                    alt={`${logo.alt} (${i + 1})`}
-                    width={200}
-                    height={200}
-                    decoding="async"
-                    className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
+              <div className="col-span-2 lg:col-span-6 flex lg:justify-end">
+                <span className="inline-block px-4 py-1.5 rounded-full border border-white/60 font-dm text-[11px] uppercase tracking-[1.2px] text-white">
+                  Branding
+                </span>
+              </div>
             </div>
           </section>
-        )}
 
-        {/* Bottom CTA Banner */}
-        <section className="py-16 bg-gradient-to-r from-[#6a35ff] to-[#ec186a] text-white text-center">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            <h2 className="text-3xl sm:text-4xl font-black">
-              {isEs ? '¿Quieres una Identidad Como Esta Para Tu Negocio?' : 'Ready to Elevate Your Brand Identity?'}
-            </h2>
-            <p className="text-base sm:text-lg text-purple-100 max-w-2xl mx-auto">
-              {isEs
-                ? 'Hablemos de tus metas comerciales y creemos una marca que posicione a tu empresa en lo más alto.'
-                : "Let's align on your market goals and craft an identity system that commands authority."}
-            </p>
-            <div>
-              <a
-                href={isEs ? '/contacto' : '/contact'}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-[#6a35ff] hover:bg-gray-100 font-bold uppercase tracking-wider shadow-2xl transition-all"
-              >
-                <span>{isEs ? 'Solicitar Propuesta' : 'Request a Proposal'}</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
+          {/* Full-Width Hero Image (image_url="359") */}
+          <section className="w-full bg-[#000000]">
+            <img
+              src="/images/wp/359_danielle-suijkerbuijk-ntnkDuf-tH8-unsplash-scaled-1.webp"
+              alt="Innk Branding Showcase"
+              width={1920}
+              height={1080}
+              className="w-full h-auto block object-cover"
+            />
+          </section>
+
+          {/* Description Row (1/3 "INNK" | 2/3 "Proyecto 4" + "View Results" underline CTA) */}
+          <section className="max-w-[1320px] mx-auto px-6 sm:px-10 lg:px-[90px] py-[6%]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="lg:col-span-4">
+                <h6 className="font-dm text-[13px] font-semibold uppercase tracking-widest text-white">
+                  INNK
+                </h6>
+              </div>
+              <div className="lg:col-span-8 lg:pr-[15%]">
+                <p className="font-dm text-[20px] sm:text-[24px] leading-[1.6] text-white mb-12">
+                  Proyecto 4
+                </p>
+                <a
+                  href="#results"
+                  className="inline-block font-dm text-[16px] text-white border-b border-white pb-1 hover:text-white/80 transition-colors"
+                >
+                  View Results
+                </a>
+              </div>
+            </div>
+          </section>
+
+          {/* Results Image Row (id="results", image_url="507": proyect-4.png) */}
+          <section id="results" className="max-w-[1320px] mx-auto px-6 sm:px-10 lg:px-[90px] pb-16">
+            <img
+              src="/images/wp/507_proyect-4.png"
+              alt="Innk Brand Results"
+              width={1400}
+              height={900}
+              className="w-full h-auto rounded-[5px] block"
+            />
+          </section>
+        </main>
+
+        <Footer
+          lang={lang}
+          showExploreMoreWork={true}
+          currentPortfolioSlug="luminara"
+        />
+      </div>
+    );
+  }
+
+  // 3. Exact 1:1 Layout for /portfolio/astralis (Alery - WP Post ID 75) & /portfolio/spectral (Brioche - WP Post ID 28)
+  const isBrioche = slug === 'spectral';
+  const headingText = isBrioche
+    ? 'Soluciones que transforman ideas'
+    : item?.title || 'Alery';
+  const yearText = isBrioche ? '2023' : '2024';
+  const clientText = isBrioche ? 'Brioche' : 'Alery';
+  const categoryText = isBrioche ? 'Web Design' : 'Film';
+  const fullImage = isBrioche
+    ? '/images/wp/504_proyect-1.png'
+    : '/images/wp/506_proyect-3.png';
+
+  return (
+    <div className="min-h-screen flex flex-col bg-[#000000] text-white">
+      <Navbar lang={lang} currentPath={currentPath} />
+
+      <main id="main" className="flex-grow bg-[#000000]">
+        {/* Top Header Row (bg_color="#000000", top_padding="3em", bottom_padding="3em") */}
+        <section className="max-w-[1320px] mx-auto px-6 sm:px-10 lg:px-[90px] py-12 lg:py-16">
+          <div className="py-[5%] pr-0 lg:pr-[20%]">
+            <h1
+              className="font-gloock text-white font-normal"
+              style={{ fontSize: 'clamp(44px, 6vw, 104px)', lineHeight: 1.2 }}
+            >
+              {headingText}
+            </h1>
+          </div>
+
+          {/* Equal-Height Bottom-Aligned Meta Bar: Year | Client | Outlined Category Pill */}
+          <div className="grid grid-cols-2 lg:grid-cols-12 gap-6 items-end pt-4">
+            <div className="col-span-1 lg:col-span-3">
+              <h6 className="font-dm text-[12px] uppercase tracking-wider text-white/60 mb-1">
+                Year
+              </h6>
+              <p className="font-dm text-[16px] text-white">{yearText}</p>
+            </div>
+            <div className="col-span-1 lg:col-span-3">
+              <h6 className="font-dm text-[12px] uppercase tracking-wider text-white/60 mb-1">
+                Client
+              </h6>
+              <p className="font-dm text-[16px] text-white">{clientText}</p>
+            </div>
+            <div className="col-span-2 lg:col-span-6 flex lg:justify-end">
+              <span className="inline-block px-4 py-1.5 rounded-full border border-white/60 font-dm text-[11px] uppercase tracking-[1.2px] text-white">
+                {categoryText}
+              </span>
             </div>
           </div>
+        </section>
+
+        {/* Full-Width Project Showcase Image */}
+        <section className="w-full bg-[#000000]">
+          <img
+            src={fullImage}
+            alt={clientText}
+            width={1920}
+            height={1080}
+            className="w-full h-auto block object-cover"
+          />
         </section>
       </main>
 
-      <Footer lang={lang} />
+      <Footer
+        lang={lang}
+        showExploreMoreWork={true}
+        currentPortfolioSlug={slug}
+      />
     </div>
   );
 };

@@ -1,144 +1,361 @@
-import React from 'react';
-import { Language, ServiceItem } from '../types';
+import React, { useEffect, useRef, useState } from 'react';
+import { Language } from '../types';
 import { servicesEn, servicesEs } from '../content/siteContent';
-import {
-  Palette,
-  Globe,
-  Shirt,
-  Sparkles,
-  Film,
-  Truck,
-  TrendingUp,
-  Megaphone,
-  CheckCircle2,
-  ArrowRight,
-} from 'lucide-react';
 
 interface ServicesSectionProps {
   lang: Language;
 }
 
-const iconMap: Record<string, React.FC<{ className?: string }>> = {
-  Palette,
-  Globe,
-  Shirt,
-  Sparkles,
-  Film,
-  Truck,
-  TrendingUp,
-  Megaphone,
+const IconsmindSvg: React.FC<{ name: string; gradId: string }> = ({ name, gradId }) => {
+  const strokeUrl = `url(#${gradId})`;
+
+  switch (name) {
+    case 'crown':
+      // iconsmind-Crown-2
+      return (
+        <svg viewBox="0 0 50 50" className="w-[50px] h-[50px]" fill="none">
+          <defs>
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d81684" />
+              <stop offset="100%" stopColor="#60318a" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M7 36L11 16L20 25L25 13L30 25L39 16L43 36H7Z"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="transition-colors duration-300 group-hover:stroke-white"
+          />
+          <path
+            d="M7 41H43"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            className="transition-colors duration-300 group-hover:stroke-white"
+          />
+          <circle cx="25" cy="10" r="2" stroke={strokeUrl} strokeWidth="1.6" className="group-hover:stroke-white" />
+          <circle cx="10" cy="13" r="1.8" stroke={strokeUrl} strokeWidth="1.6" className="group-hover:stroke-white" />
+          <circle cx="40" cy="13" r="1.8" stroke={strokeUrl} strokeWidth="1.6" className="group-hover:stroke-white" />
+        </svg>
+      );
+    case 'layers':
+      // iconsmind-Duplicate-Layer
+      return (
+        <svg viewBox="0 0 50 50" className="w-[50px] h-[50px]" fill="none">
+          <defs>
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d81684" />
+              <stop offset="100%" stopColor="#60318a" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M25 9L43 18.5L25 28L7 18.5L25 9Z"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinejoin="round"
+            className="group-hover:stroke-white"
+          />
+          <path
+            d="M7 26L25 35.5L43 26"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="group-hover:stroke-white"
+          />
+          <path
+            d="M7 33.5L25 43L43 33.5"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="group-hover:stroke-white"
+          />
+        </svg>
+      );
+    case 'monitor-phone':
+      // iconsmind-Monitor-phone
+      return (
+        <svg viewBox="0 0 50 50" className="w-[50px] h-[50px]" fill="none">
+          <defs>
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d81684" />
+              <stop offset="100%" stopColor="#60318a" />
+            </linearGradient>
+          </defs>
+          <rect
+            x="6"
+            y="10"
+            width="30"
+            height="22"
+            rx="2"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            className="group-hover:stroke-white"
+          />
+          <path d="M16 39H26" stroke={strokeUrl} strokeWidth="1.7" strokeLinecap="round" className="group-hover:stroke-white" />
+          <path d="M21 32V39" stroke={strokeUrl} strokeWidth="1.7" strokeLinecap="round" className="group-hover:stroke-white" />
+          <rect
+            x="32"
+            y="21"
+            width="12"
+            height="21"
+            rx="2"
+            fill="transparent"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            className="group-hover:stroke-white"
+          />
+          <circle cx="38" cy="38.5" r="1" fill="#60318a" className="group-hover:fill-white" />
+        </svg>
+      );
+    case 'refresh':
+      // iconsmind-Refresh
+      return (
+        <svg viewBox="0 0 50 50" className="w-[50px] h-[50px]" fill="none">
+          <defs>
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d81684" />
+              <stop offset="100%" stopColor="#60318a" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M39 25C39 32.732 32.732 39 25 39C17.268 39 11 32.732 11 25C11 17.268 17.268 11 25 11C29.8 11 34.04 13.42 36.56 17.1"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            className="group-hover:stroke-white"
+          />
+          <path
+            d="M37 10V18H29"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="group-hover:stroke-white"
+          />
+        </svg>
+      );
+    case 'photos':
+      // iconsmind-Photos
+      return (
+        <svg viewBox="0 0 50 50" className="w-[50px] h-[50px]" fill="none">
+          <defs>
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d81684" />
+              <stop offset="100%" stopColor="#60318a" />
+            </linearGradient>
+          </defs>
+          <rect
+            x="11"
+            y="14"
+            width="31"
+            height="24"
+            rx="2"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            className="group-hover:stroke-white"
+          />
+          <path
+            d="M8 33V11C8 9.89543 8.89543 9 10 9H36"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            className="group-hover:stroke-white"
+          />
+          <circle cx="20" cy="22" r="3" stroke={strokeUrl} strokeWidth="1.6" className="group-hover:stroke-white" />
+          <path
+            d="M12 35L21 27L28 33L34 27L42 35"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="group-hover:stroke-white"
+          />
+        </svg>
+      );
+    case 'flash':
+      // iconsmind-Flash
+      return (
+        <svg viewBox="0 0 50 50" className="w-[50px] h-[50px]" fill="none">
+          <defs>
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d81684" />
+              <stop offset="100%" stopColor="#60318a" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M28 7L12 27H25L22 43L38 23H25L28 7Z"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="group-hover:stroke-white"
+          />
+        </svg>
+      );
+    case 'newsvine':
+      // iconsmind-Newsvine
+      return (
+        <svg viewBox="0 0 50 50" className="w-[50px] h-[50px]" fill="none">
+          <defs>
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d81684" />
+              <stop offset="100%" stopColor="#60318a" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M25 42V14"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            className="group-hover:stroke-white"
+          />
+          <path
+            d="M25 22C25 16 31 11 38 11C38 18 33 23 25 23"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="group-hover:stroke-white"
+          />
+          <path
+            d="M25 29C25 23 19 18 12 18C12 25 17 30 25 30"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="group-hover:stroke-white"
+          />
+          <path
+            d="M25 14C22 10 22 7 25 7C28 7 28 10 25 14Z"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            className="group-hover:stroke-white"
+          />
+        </svg>
+      );
+    case 'sidebar-window':
+    default:
+      // iconsmind-Sidebar-Window
+      return (
+        <svg viewBox="0 0 50 50" className="w-[50px] h-[50px]" fill="none">
+          <defs>
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d81684" />
+              <stop offset="100%" stopColor="#60318a" />
+            </linearGradient>
+          </defs>
+          <rect
+            x="7"
+            y="10"
+            width="36"
+            height="30"
+            rx="2.5"
+            stroke={strokeUrl}
+            strokeWidth="1.7"
+            className="group-hover:stroke-white"
+          />
+          <path d="M7 18H43" stroke={strokeUrl} strokeWidth="1.7" className="group-hover:stroke-white" />
+          <path d="M19 18V40" stroke={strokeUrl} strokeWidth="1.7" className="group-hover:stroke-white" />
+          <circle cx="11.5" cy="14" r="1" fill="#d81684" className="group-hover:fill-white" />
+          <circle cx="15.5" cy="14" r="1" fill="#9c2487" className="group-hover:fill-white" />
+          <circle cx="19.5" cy="14" r="1" fill="#60318a" className="group-hover:fill-white" />
+        </svg>
+      );
+  }
 };
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({ lang }) => {
   const isEs = lang === 'es';
-  const services: ServiceItem[] = isEs ? servicesEs : servicesEn;
-  const sectionId = isEs ? 'servicios' : 'services';
+  const services = isEs ? servicesEs : servicesEn;
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section id={sectionId} className="relative py-20 lg:py-28 bg-[#0b0f17] scroll-mt-24">
-      {/* Background radial gradient accent */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-96 bg-purple-900/10 rounded-full blur-[160px] pointer-events-none" />
+    <section
+      id="servicios"
+      ref={sectionRef}
+      className="relative w-full bg-[#ffffff] text-[#000000] pt-[5vw] pb-[9vw] px-6 sm:px-10 lg:px-[90px] scroll-mt-[90px] lg:scroll-mt-[136px]"
+    >
+      <div id="services" className="sr-only" aria-hidden="true" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs sm:text-sm font-semibold mb-4">
-            <Sparkles className="w-4 h-4 text-[#ec186a]" />
-            <span>{isEs ? 'Soluciones 360°' : 'Comprehensive 360° Solutions'}</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            {isEs ? (
-              <>
-                Nuestros <span className="text-gradient-brand">Servicios Creativos</span>
-              </>
-            ) : (
-              <>
-                Our <span className="text-gradient-brand">Creative Services</span>
-              </>
-            )}
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-300 leading-relaxed">
+      <div className="max-w-[1260px] mx-auto">
+        {/* Centered Header Block (matching WPBakery 1/6 + 2/3 + 1/6 row) */}
+        <div
+          className={`max-w-[680px] mx-auto text-center mb-14 lg:mb-16 salient-fade-bottom ${
+            visible ? 'is-visible' : ''
+          }`}
+        >
+          <h5 className="font-dm text-[14px] font-medium text-[#000000] tracking-normal mb-3">
             {isEs
-              ? 'Desde la creación de tu identidad corporativa y rotulación de vehículos hasta páginas web de última generación y estrategias digitales orientadas a resultados.'
-              : 'From complete corporate brand development and vehicle wraps to cutting-edge web design and conversion-focused digital marketing.'}
+              ? 'Servicios - Creatividad que rompe esquemas'
+              : 'Services – Creativity that breaks the mold'}
+          </h5>
+
+          <h2 className="font-gloock text-[34px] sm:text-[42px] lg:text-[44px] leading-[1.18] text-[#000000] font-normal mb-5">
+            {isEs ? 'Nuestros servicios' : 'Our services'}
+          </h2>
+
+          <p className="font-dm text-[15px] sm:text-[16px] leading-[28px] text-[#333333] font-normal">
+            {isEs
+              ? 'Somos una agencia de comunicaciones que ofrece diversos servicios de relaciones públicas. Si deseas tomar una ventaja competitiva, te invitamos a que compruebes cómo pueden ayudarle nuestros servicios de consultoría..'
+              : 'We are a communications agency offering various public relations services. If you want to gain a competitive advantage, we invite you to see how our consulting services can help you..'}
           </p>
         </div>
 
-        {/* 8 Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {services.map((service) => {
-            const Icon = iconMap[service.iconName] || Sparkles;
-            const isFeatured = service.badge === 'Flagship' || service.badge === 'Especialidad';
-
+        {/* 4x2 Grid of Salient fancy_box (box_style="color_box_hover") Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-[26px]">
+          {services.map((service, index) => {
+            const colDelay = (index % 4) * 100;
             return (
               <div
                 key={service.id}
-                className={`group relative rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 ${
-                  isFeatured
-                    ? 'bg-gradient-to-b from-[#1c1236] to-[#141226] border-2 border-[#6a35ff] shadow-xl shadow-purple-950/50 hover:border-[#ec186a]'
-                    : 'bg-[#121724]/90 border border-white/10 hover:border-purple-500/40 hover:bg-[#161c2e] hover:shadow-lg hover:shadow-purple-950/40'
+                style={{ transitionDelay: `${colDelay}ms` }}
+                className={`group salient-fancy-box min-h-[340px] lg:min-h-[354px] p-8 lg:p-[36px] flex flex-col justify-between cursor-pointer salient-fade-bottom ${
+                  visible ? 'is-visible' : ''
                 }`}
               >
-                {/* Top Badge */}
-                {service.badge && (
-                  <div className="absolute top-4 right-4">
-                    <span
-                      className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${
-                        isFeatured
-                          ? 'bg-[#ec186a] text-white shadow-md shadow-pink-600/40'
-                          : 'bg-purple-950/80 text-purple-300 border border-purple-500/30'
-                      }`}
-                    >
-                      {service.badge}
-                    </span>
-                  </div>
-                )}
+                {/* Hover Background Photo */}
+                <div
+                  className="fancy-box-bg"
+                  style={{ backgroundImage: `url(${service.image})` }}
+                />
 
-                <div>
-                  {/* Icon */}
-                  <div
-                    className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 ${
-                      isFeatured
-                        ? 'bg-gradient-to-br from-[#6a35ff] to-[#ec186a] text-white shadow-md shadow-purple-600/40'
-                        : 'bg-purple-950/60 border border-purple-500/30 text-purple-400 group-hover:text-white group-hover:bg-[#6a35ff]/30'
-                    }`}
-                  >
-                    <Icon className="w-7 h-7" />
-                  </div>
+                {/* Hover Extra-Color-Gradient-1 Overlay (#d81684 -> #60318a) */}
+                <div className="fancy-box-overlay" />
 
-                  {/* Title & Tagline */}
-                  <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-xs font-semibold text-purple-400 mt-1 uppercase tracking-wider">
-                    {service.tagline}
-                  </p>
-
-                  {/* Description */}
-                  <p className="text-sm text-gray-300 mt-3 leading-relaxed">
-                    {service.description}
-                  </p>
-
-                  {/* Features List */}
-                  <ul className="mt-5 space-y-2 pt-4 border-t border-white/10">
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs text-gray-300">
-                        <CheckCircle2 className="w-4 h-4 text-[#ec186a] shrink-0 mt-0.5" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Top Iconsmind SVG Icon */}
+                <div className="fancy-box-content pt-1">
+                  <IconsmindSvg name={service.iconName} gradId={`svc-grad-${service.id}`} />
                 </div>
 
-                {/* Card Action Link */}
-                <div className="mt-6 pt-4">
-                  <a
-                    href={isEs ? '#formulario' : '#contact'}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-purple-400 hover:text-white group-hover:translate-x-1 transition-all"
-                  >
-                    <span>{isEs ? 'Consultar este servicio' : 'Inquire About This'}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                {/* Bottom Title & Description */}
+                <div className="fancy-box-content mt-auto pt-12">
+                  <h4 className="font-gloock text-[20px] lg:text-[22px] leading-[1.28] text-[#000000] group-hover:text-white transition-colors duration-300 mb-3">
+                    {service.title}
+                  </h4>
+                  <p className="font-dm text-[14px] lg:text-[15px] leading-[24px] text-[#4a4a4a] group-hover:text-white/95 transition-colors duration-300">
+                    {service.description}
+                  </p>
                 </div>
               </div>
             );

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Language, ContactFormData, ContactSubmissionStatus } from '../types';
-import { clientLogos, siteMetadata } from '../content/siteContent';
+import { clientLogos } from '../content/siteContent';
 import { submitContactForm } from '../adapters/contactAdapter';
 import { SMS_CONSENT, legalPath } from '../legal/legalDocs';
-import { Sparkles, Send, CheckCircle, AlertCircle, Phone, Mail, MapPin } from 'lucide-react';
 
 interface ClientFormSectionProps {
   lang: Language;
@@ -11,345 +10,253 @@ interface ClientFormSectionProps {
 
 export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) => {
   const isEs = lang === 'es';
-  const sectionId = isEs ? 'formulario' : 'contact';
 
   const [formData, setFormData] = useState<ContactFormData>({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    service: 'wrap',
+    service: 'general',
     message: '',
-    website_hp: '', // Honeypot
+    website_hp: '',
   });
 
   const [status, setStatus] = useState<ContactSubmissionStatus>('idle');
-  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [feedback, setFeedback] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
-    setFeedbackMessage('');
+    setFeedback('');
 
     const res = await submitContactForm(formData, lang);
     if (res.ok) {
       setStatus('success');
-      setFeedbackMessage(res.message);
+      setFeedback(res.message);
       setFormData({
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
-        service: 'wrap',
+        service: 'general',
         message: '',
         website_hp: '',
       });
     } else {
       setStatus('error');
-      setFeedbackMessage(res.message);
+      setFeedback(res.message);
     }
   };
 
-  return (
-    <section id={sectionId} className="py-20 lg:py-28 bg-[#141c27] relative scroll-mt-24">
-      {/* Background accent */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
+  // Duplicate client sample cards for seamless infinite Flickity ticker loop
+  const tickerItems = [...clientLogos, ...clientLogos, ...clientLogos];
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Client Logos Carousel / Trust Bar */}
-        <div className="mb-20 text-center">
-          <p className="text-xs uppercase tracking-widest text-purple-400 font-bold mb-8">
-            {isEs ? 'EMPRESAS Y MARCAS QUE CONFÍAN EN NOSOTROS' : 'TRUSTED BY LEADING BUSINESSES & BRANDS'}
+  return (
+    <section
+      id="formulario"
+      className="relative w-full bg-[#141c27] text-white py-[8vw] px-6 sm:px-10 lg:px-[90px] overflow-hidden scroll-mt-[90px] lg:scroll-mt-[136px]"
+    >
+      <div id="contact" className="sr-only" aria-hidden="true" />
+
+      <div className="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-start">
+        {/* 1/12 Left Offset on Desktop */}
+        <div className="hidden lg:block lg:col-span-1" />
+
+        {/* Left Column (width="1/2" -> 6 cols): Heading + Paragraph + Continuous Flickity Ticker Carousel */}
+        <div className="lg:col-span-6 lg:pr-8">
+          <h2 className="font-gloock text-[32px] sm:text-[38px] lg:text-[42px] leading-[1.18] text-white font-normal mb-6">
+            {isEs ? (
+              <>
+                ¿Tienes algún proyecto en mente?
+                <br />
+                ¡cuéntanos tu idea!
+              </>
+            ) : (
+              <>
+                Have a project in mind?
+                <br />
+                Tell us your idea!
+              </>
+            )}
+          </h2>
+
+          <p className="font-dm text-[15px] sm:text-[16px] leading-[28px] text-white/90 font-normal mb-10 max-w-[540px]">
+            {isEs ? (
+              <>
+                En Rueda la Rola creemos en las conexiones que nacen del movimiento.
+                <br />
+                Si esta idea te vibra, estás a un paso de rodar con nosotros. Escríbenos!
+              </>
+            ) : (
+              <>
+                At Rueda la Rola we believe in connections born from movement.
+                <br />
+                If this idea resonates with you, you&apos;re one step away from rolling with us. Write to us!
+              </>
+            )}
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 items-center justify-center">
-            {clientLogos.map((client) => (
-              <div
-                key={client.name}
-                className="h-20 sm:h-24 p-4 rounded-2xl bg-black/30 border border-white/10 hover:border-purple-500/40 flex items-center justify-center transition-all group"
-              >
-                <img
-                  src={client.image}
-                  alt={`${client.name} logo`}
-                  width={300}
-                  height={150}
-                  className="max-h-12 w-auto object-contain filter grayscale opacity-75 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
-                  loading="lazy"
-                />
-              </div>
-            ))}
+          {/* Continuous Flickity Ticker Carousel (5 Client Sample Cards: ONUT, UNIEMPRESAS, ANCOVI, JERONIMOS, INFRARROJO) */}
+          <div className="relative w-full overflow-hidden pt-2">
+            <div className="animate-flickity-ticker flex items-center gap-[10px]">
+              {tickerItems.map((logo, idx) => (
+                <div
+                  key={`${logo.name}-${idx}`}
+                  className="w-[155px] sm:w-[175px] shrink-0 overflow-hidden"
+                >
+                  <img
+                    src={logo.image}
+                    alt={`${logo.name} Brand Sample`}
+                    width={320}
+                    height={180}
+                    className="w-full h-auto object-cover block"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Main Appointment & Form Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column: Direct Contact Info */}
-          <div className="lg:col-span-5 flex flex-col items-start space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-semibold">
-              <Sparkles className="w-4 h-4 text-[#ec186a]" />
-              <span>{isEs ? 'Hablemos Hoy' : "Let's Connect"}</span>
-            </div>
+        {/* Right Column (width="1/3" -> 4 cols): Centered Title + Fluent Form #1 */}
+        <div className="lg:col-span-4 w-full max-w-[440px] mx-auto lg:mx-0">
+          <h3 className="font-gloock text-[20px] sm:text-[22px] leading-[1.3] font-bold text-white text-center mb-7">
+            {isEs ? 'Agenda una cita con nosotros' : 'Schedule an appointment with us'}
+          </h3>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-              {isEs ? (
-                <>
-                  ¿Listo para hacer <span className="text-gradient-brand">crecer tu marca</span>?
-                </>
-              ) : (
-                <>
-                  Ready to take your <span className="text-gradient-brand">brand to the next level</span>?
-                </>
+          {status === 'success' ? (
+            <div className="p-6 rounded-lg bg-white/10 border border-white/25 text-center space-y-4">
+              <p className="font-gloock text-xl text-white">
+                {isEs ? '¡Gracias por tu mensaje!' : 'Thank you for your message!'}
+              </p>
+              <p className="font-dm text-sm text-white/85">{feedback}</p>
+              <button
+                type="button"
+                onClick={() => setStatus('idle')}
+                className="px-6 py-2.5 bg-white text-[#6a35ff] font-dm text-sm font-semibold rounded-[4px] hover:bg-[#e2dddd] hover:text-white transition-colors"
+              >
+                {isEs ? 'Enviar otro mensaje' : 'Send another message'}
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-[18px]">
+              {/* Honeypot anti-spam field */}
+              <div className="hidden" aria-hidden="true">
+                <input
+                  type="text"
+                  name="website_hp"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={formData.website_hp}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="ff_home_firstName" className="sr-only">
+                  Nombres
+                </label>
+                <input
+                  id="ff_home_firstName"
+                  type="text"
+                  name="firstName"
+                  required
+                  placeholder="Nombres"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-[4px] font-dm text-[15px] text-white placeholder-white/65 focus:outline-none focus:border-white transition-colors"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="ff_home_email" className="sr-only">
+                  Email
+                </label>
+                <input
+                  id="ff_home_email"
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-[4px] font-dm text-[15px] text-white placeholder-white/65 focus:outline-none focus:border-white transition-colors"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="ff_home_phone" className="sr-only">
+                  Celular
+                </label>
+                <input
+                  id="ff_home_phone"
+                  type="tel"
+                  name="phone"
+                  required
+                  placeholder="Celular"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-[4px] font-dm text-[15px] text-white placeholder-white/65 focus:outline-none focus:border-white transition-colors"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="ff_home_message" className="sr-only">
+                  Mensaje
+                </label>
+                <textarea
+                  id="ff_home_message"
+                  name="message"
+                  rows={3}
+                  required
+                  placeholder="Mensaje"
+                  value={formData.message}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-[4px] font-dm text-[15px] text-white placeholder-white/65 focus:outline-none focus:border-white transition-colors resize-y"
+                />
+              </div>
+
+              {status === 'error' && (
+                <p className="text-xs text-rose-300 text-center">{feedback}</p>
               )}
-            </h2>
 
-            <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
-              {isEs
-                ? 'Agenda una cita con nuestro equipo en Austin, TX. Te asesoramos en el diseño de tu marca, rotulación vehicular comercial o desarrollo web con una propuesta a la medida de tu presupuesto.'
-                : 'Schedule a consultation with our Austin creative team. We will guide you through brand identity, vehicle wraps, or high-performance web development with a solution tailored to your goals.'}
-            </p>
+              {/* Discrete TCPA & US Privacy Disclosure */}
+              <p className="text-[10px] leading-snug text-white/55 text-center px-1">
+                {SMS_CONSENT[lang].before}
+                <a href={legalPath('privacy', lang)} className="underline hover:text-white">
+                  {SMS_CONSENT[lang].privacy}
+                </a>
+                {SMS_CONSENT[lang].and}
+                <a href={legalPath('terms', lang)} className="underline hover:text-white">
+                  {SMS_CONSENT[lang].terms}
+                </a>
+                {SMS_CONSENT[lang].after}
+              </p>
 
-            <div className="space-y-4 pt-4 w-full">
-              <a
-                href={`tel:${siteMetadata.phoneRaw}`}
-                className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/40 transition-all group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-[#ec186a] group-hover:scale-110 transition-transform">
-                  <Phone className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                    {isEs ? 'Llámanos o envíanos un WhatsApp' : 'Direct Line & Support'}
-                  </p>
-                  <p className="text-base sm:text-lg font-bold text-white group-hover:text-purple-300">
-                    {siteMetadata.phone}
-                  </p>
-                </div>
-              </a>
-
-              <a
-                href={`mailto:${siteMetadata.email}`}
-                className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/40 transition-all group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
-                  <Mail className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                    {isEs ? 'Correo Electrónico' : 'Email Us'}
-                  </p>
-                  <p className="text-base sm:text-lg font-bold text-white group-hover:text-purple-300 break-all">
-                    {siteMetadata.email}
-                  </p>
-                </div>
-              </a>
-
-              <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                <div className="w-12 h-12 rounded-xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-yellow-400">
-                  <MapPin className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                    {isEs ? 'Ubicación' : 'Location'}
-                  </p>
-                  <p className="text-base font-bold text-white">
-                    {siteMetadata.address.city}, {siteMetadata.address.state} &middot; {siteMetadata.address.area}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Appointment Form */}
-          <div className="lg:col-span-7 bg-[#0b0f17] border border-white/15 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
-            <h3 className="text-2xl font-bold text-white mb-2">
-              {isEs ? 'Agendar Cita o Solicitar Cotización' : 'Schedule Consultation / Request Quote'}
-            </h3>
-            <p className="text-sm text-gray-400 mb-6">
-              {isEs
-                ? 'Completa el formulario y te responderemos en menos de 24 horas hábiles.'
-                : 'Fill out this brief form and our team will get back to you within 24 business hours.'}
-            </p>
-
-            {status === 'success' ? (
-              <div className="p-6 rounded-2xl bg-emerald-950/60 border border-emerald-500/50 text-center space-y-3">
-                <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto" />
-                <h4 className="text-xl font-bold text-white">
-                  {isEs ? '¡Mensaje Enviado con Éxito!' : 'Message Sent Successfully!'}
-                </h4>
-                <p className="text-sm text-emerald-200">{feedbackMessage}</p>
-                <button
-                  onClick={() => setStatus('idle')}
-                  className="mt-4 px-6 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition-colors"
-                >
-                  {isEs ? 'Enviar otro mensaje' : 'Send another message'}
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Honeypot anti-spam field */}
-                <div className="hidden" aria-hidden="true">
-                  <label htmlFor="website_hp">Website</label>
-                  <input
-                    type="text"
-                    id="website_hp"
-                    name="website_hp"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    value={formData.website_hp}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="firstName" className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
-                      {isEs ? 'Nombres *' : 'First Name *'}
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      required
-                      placeholder={isEs ? 'Tu nombre' : 'Your first name'}
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-[#141c27] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#6a35ff] focus:ring-1 focus:ring-[#6a35ff] transition-all text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="lastName" className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
-                      {isEs ? 'Apellidos' : 'Last Name'}
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      placeholder={isEs ? 'Tu apellido' : 'Your last name'}
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-[#141c27] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#6a35ff] focus:ring-1 focus:ring-[#6a35ff] transition-all text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
-                      {isEs ? 'Correo Electrónico *' : 'Email Address *'}
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      placeholder="nombre@empresa.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-[#141c27] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#6a35ff] focus:ring-1 focus:ring-[#6a35ff] transition-all text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
-                      {isEs ? 'Teléfono / Celular *' : 'Phone Number *'}
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      required
-                      placeholder="(512) 000-0000"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-[#141c27] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#6a35ff] focus:ring-1 focus:ring-[#6a35ff] transition-all text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="service" className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
-                    {isEs ? 'Servicio de Interés' : 'Service of Interest'}
-                  </label>
-                  <select
-                    id="service"
-                    name="service"
-                    value={formData.service}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-[#141c27] border border-white/10 text-white focus:outline-none focus:border-[#6a35ff] focus:ring-1 focus:ring-[#6a35ff] transition-all text-sm"
-                  >
-                    <option value="wrap">{isEs ? 'Rotulación Vehicular / Wrap Comercial' : 'Vehicle Wrap / Commercial Fleet'}</option>
-                    <option value="brand">{isEs ? 'Diseño de Marca / Logotipo' : 'Brand Identity / Logo Design'}</option>
-                    <option value="web">{isEs ? 'Diseño & Desarrollo Web' : 'Web Design & Development'}</option>
-                    <option value="merch">{isEs ? 'Merchandising & Uniformes' : 'Custom Apparel & Merch'}</option>
-                    <option value="marketing">{isEs ? 'Marketing Digital & Anuncios' : 'Digital Marketing & Ads'}</option>
-                    <option value="other">{isEs ? 'Otro Servicio' : 'Other Inquiries'}</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
-                    {isEs ? 'Cuéntanos sobre tu proyecto *' : 'Tell us about your project *'}
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    required
-                    placeholder={
-                      isEs
-                        ? 'Describe tu empresa, tipo de vehículo o visión de diseño...'
-                        : 'Describe your business, vehicle type, or branding goals...'
-                    }
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-[#141c27] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#6a35ff] focus:ring-1 focus:ring-[#6a35ff] transition-all text-sm resize-none"
-                  />
-                </div>
-
-                {status === 'error' && (
-                  <div className="p-3.5 rounded-xl bg-red-950/60 border border-red-500/50 flex items-center gap-2 text-xs text-red-200">
-                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-                    <span>{feedbackMessage}</span>
-                  </div>
-                )}
-
-                <p className="text-[11px] leading-relaxed text-gray-400">
-                  {SMS_CONSENT[lang].before}
-                  <a href={legalPath('privacy', lang)} className="underline text-purple-300 hover:text-white">
-                    {SMS_CONSENT[lang].privacy}
-                  </a>
-                  {SMS_CONSENT[lang].and}
-                  <a href={legalPath('terms', lang)} className="underline text-purple-300 hover:text-white">
-                    {SMS_CONSENT[lang].terms}
-                  </a>
-                  {SMS_CONSENT[lang].after}
-                </p>
-
+              {/* Exact Fluent Form #1 Centered White Button: 151x59px, bg #ffffff, color #6a35ff, hover bg #e2dddd color #ffffff */}
+              <div className="text-center pt-1">
                 <button
                   type="submit"
                   disabled={status === 'submitting'}
-                  className="w-full py-4 px-6 rounded-xl font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#6a35ff] to-[#ec186a] hover:from-[#7c4dff] hover:to-[#f0327f] shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 transition-all flex items-center justify-center gap-2"
+                  className="inline-flex items-center justify-center min-w-[151px] h-[54px] px-7 bg-[#ffffff] text-[#6a35ff] border border-white rounded-[4px] font-dm text-[16px] font-medium hover:bg-[#e2dddd] hover:text-white transition-colors duration-200 cursor-pointer disabled:opacity-60"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>
-                    {status === 'submitting'
-                      ? isEs
-                        ? 'Enviando...'
-                        : 'Sending...'
-                      : isEs
-                      ? 'Agendar cita'
-                      : 'Schedule Appointment'}
-                  </span>
+                  {status === 'submitting'
+                    ? isEs
+                      ? 'Enviando...'
+                      : 'Sending...'
+                    : 'Agendar cita'}
                 </button>
-              </form>
-            )}
-          </div>
+              </div>
+            </form>
+          )}
         </div>
+
+        <div className="hidden lg:block lg:col-span-1" />
       </div>
     </section>
   );

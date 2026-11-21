@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Language } from '../types';
-import { Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface SplitSectionsProps {
   lang: Language;
@@ -8,153 +7,179 @@ interface SplitSectionsProps {
 
 export const SplitSections: React.FC<SplitSectionsProps> = ({ lang }) => {
   const isEs = lang === 'es';
+  const row1Ref = useRef<HTMLDivElement | null>(null);
+  const row2Ref = useRef<HTMLDivElement | null>(null);
+  const row3Ref = useRef<HTMLDivElement | null>(null);
+  const [vis1, setVis1] = useState(false);
+  const [vis2, setVis2] = useState(false);
+  const [vis3, setVis3] = useState(false);
 
-  const rows = [
-    {
-      id: 'branding-impact',
-      eyebrow: isEs ? 'Diseño de Marca' : 'Brand Identity System',
-      title: isEs
-        ? 'Identidades que conectan y perduran en la mente del consumidor.'
-        : 'Brand identities that resonate and command customer authority.',
-      description: isEs
-        ? 'Una marca sólida es mucho más que un dibujo: es la reputación y confianza que transmites en el primer milisegundo de contacto. Construimos identidades cohesivas que funcionan tanto en una tarjeta de presentación como en la carrocería de tu camioneta.'
-        : 'A powerful brand is far more than an icon: it is the immediate authority and trust communicated within the first fraction of a second. We architect cohesive visual systems that thrive equally on luxury packaging, mobile screens, and full vehicle wraps.',
-      points: isEs
-        ? [
-            'Sistemas tipográficos y guías de color de alto contraste',
-            'Archivos vectoriales originales para cualquier soporte de impresión',
-            'Adaptaciones para redes sociales, uniformes y rotulación',
-          ]
-        : [
-            'High-contrast typography systems & custom color palettes',
-            'Master vector source files ready for any physical or digital medium',
-            'Seamless brand adaptations for social media, uniforms, and wraps',
-          ],
-      image: '/images/split-branding.webp',
-      imageAlt: 'Strategic Branding Design by Rueda La Rola Media',
-      reverse: false,
-    },
-    {
-      id: 'commitment-strategy',
-      eyebrow: isEs ? 'Nuestro Compromiso' : 'Our Dedication',
-      title: isEs
-        ? 'Estrategia creativa enfocada en el crecimiento de tu negocio.'
-        : 'Creative execution laser-focused on bottom-line business growth.',
-      description: isEs
-        ? 'No diseñamos por diseñar. Cada proyecto responde a un objetivo de negocio claro: conseguir más llamadas, mejorar la percepción de valor y aumentar el ticket promedio de tus servicios en Austin y sus alrededores.'
-        : 'We never design in a vacuum. Every color choice, headline, and wrap composition is engineered with a clear commercial objective: drive more calls, command higher rates, and expand your market reach in Texas.',
-      points: isEs
-        ? [
-            'Análisis del mercado y competencia directa',
-            'Comunicación transparente y tiempos de entrega garantizados',
-            'Soporte continuo y escalabilidad para tu empresa',
-          ]
-        : [
-            'In-depth local market and competitor analysis',
-            'Direct, transparent communication and guaranteed turnarounds',
-            'Ongoing creative support tailored to your scaling needs',
-          ],
-      image: '/images/split-commitment.webp',
-      imageAlt: 'Our Strategic Commitment to Client Success',
-      reverse: true,
-    },
-    {
-      id: 'web-engineering',
-      eyebrow: isEs ? 'Desarrollo Web Moderno' : 'Modern Web Engineering',
-      title: isEs
-        ? 'Sitios web ultra rápidos diseñados para convertir visitas en clientes.'
-        : 'Lightning-fast websites engineered to convert traffic into revenue.',
-      description: isEs
-        ? 'Olvídate de páginas lentas que espantan a tus clientes. Desarrollamos con tecnologías estáticas modernas de última generación, optimizadas al 100% para dispositivos móviles y motores de búsqueda como Google.'
-        : 'Forget slow, bloated CMS sites that crash under traffic and frustrate mobile users. We build clean, modern static web applications optimized for 100/100 Core Web Vitals, instantaneous load times, and maximum SEO visibility.',
-      points: isEs
-        ? [
-            'Tiempos de carga casi instantáneos (0ms de latencia de base de datos)',
-            'Diseño 100% adaptado a pantallas móviles y tablets',
-            'Arquitectura limpia optimizada para 0 uso de CPU en la nube',
-          ]
-        : [
-            'Sub-second load times with zero database latency',
-            '100% mobile-first interface optimized for touch conversions',
-            'Pure static CDN architecture optimized for zero cloud compute overhead',
-          ],
-      image: '/images/split-webdesign.webp',
-      imageAlt: 'High-Performance Web Design and Development',
-      reverse: false,
-    },
-  ];
+  useEffect(() => {
+    const createObs = (el: HTMLElement | null, setter: (v: boolean) => void) => {
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setter(true);
+            obs.disconnect();
+          }
+        },
+        { threshold: 0.18 }
+      );
+      obs.observe(el);
+      return obs;
+    };
+
+    const o1 = createObs(row1Ref.current, setVis1);
+    const o2 = createObs(row2Ref.current, setVis2);
+    const o3 = createObs(row3Ref.current, setVis3);
+
+    return () => {
+      o1?.disconnect();
+      o2?.disconnect();
+      o3?.disconnect();
+    };
+  }, []);
 
   return (
-    <section className="py-20 lg:py-28 bg-[#0b0f17] relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 lg:space-y-32">
-        {rows.map((row) => (
+    <section id="inspirados" className="w-full overflow-hidden">
+      {/* Row 1: Left #f4f4f4 Text (padding 10%) | Right Full-Bleed Branding Photo */}
+      <div
+        ref={row1Ref}
+        className="w-full grid grid-cols-1 lg:grid-cols-2 items-stretch bg-[#f4f4f4]"
+      >
+        <div className="bg-[#f4f4f4] px-8 py-16 sm:p-16 lg:p-[16%] flex flex-col justify-center">
           <div
-            key={row.id}
-            className={`grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center ${
-              row.reverse ? 'lg:flex-row-reverse' : ''
+            className={`salient-fade-bottom ${vis1 ? 'is-visible' : ''}`}
+            style={{ transitionDelay: '0ms' }}
+          >
+            <h5 className="font-dm text-[14px] font-medium text-[#bfbfbf] mb-3">
+              {isEs ? 'Branding & Diseño de marca' : 'Branding & Brand Design'}
+            </h5>
+            <h2 className="font-gloock text-[32px] sm:text-[38px] lg:text-[42px] leading-[1.18] text-[#000000] font-normal mb-5">
+              {isEs
+                ? 'Tomamos la chispa de tu propósito y la moldeamos en una identidad poderosa.'
+                : 'We take the spark of your purpose and shape it into a powerful identity.'}
+            </h2>
+          </div>
+
+          <p
+            style={{ transitionDelay: '120ms' }}
+            className={`font-dm text-[15px] sm:text-[16px] leading-[28px] text-[#0a0a0a]/65 font-normal salient-fade-bottom ${
+              vis1 ? 'is-visible' : ''
             }`}
           >
-            {/* Image Column */}
-            <div
-              className={`lg:col-span-6 ${
-                row.reverse ? 'lg:order-2' : 'lg:order-1'
-              } flex items-center justify-center`}
-            >
-              <div className="relative rounded-3xl overflow-hidden bg-[#141c27] border border-white/10 shadow-2xl group w-full">
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={row.image}
-                    alt={row.imageAlt}
-                    width={900}
-                    height={675}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-black/50 via-transparent to-transparent pointer-events-none" />
-              </div>
-            </div>
+            {isEs
+              ? 'En nuestro taller de branding destilamos la esencia de tu historia en símbolos que enamoran a primera vista: nombres con carácter, paletas cromáticas magnéticas, tipografías que hablan con tu voz y sistemas gráficos flexibles que conquistan desde un favicon hasta una valla. Más que logotipos, construimos relatos visuales que resuenan en cada punto de contacto, haciendo que tu marca viva y palpite en la mente de tu audiencia.'
+              : 'In our branding workshop, we distill the essence of your story into symbols that inspire love at first sight: names with character, magnetic color palettes, typography that speaks with your voice, and flexible design systems ready to conquer anything from a favicon to a billboard. More than logos, we build visual narratives that resonate at every touchpoint, making your brand live and pulse in the minds of your audience.'}
+          </p>
+        </div>
 
-            {/* Text Column */}
-            <div
-              className={`lg:col-span-6 ${
-                row.reverse ? 'lg:order-1' : 'lg:order-2'
-              } flex flex-col items-start space-y-6 text-left`}
-            >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-semibold">
-                <Sparkles className="w-3.5 h-3.5 text-[#ec186a]" />
-                <span>{row.eyebrow}</span>
-              </div>
+        <div className="relative min-h-[420px] sm:min-h-[540px] lg:min-h-[690px] w-full overflow-hidden">
+          <img
+            src="/images/split-branding.webp"
+            alt={isEs ? 'Branding y Diseño de Marca' : 'Branding & Brand Design'}
+            width={960}
+            height={780}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        </div>
+      </div>
 
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                {row.title}
-              </h3>
+      {/* Row 2: Left Full-Bleed Memphis Portrait | Right #ffffff Text (padding 10%) + Outlined Contact Button */}
+      <div
+        ref={row2Ref}
+        className="w-full grid grid-cols-1 lg:grid-cols-2 items-stretch bg-[#ffffff]"
+      >
+        <div className="relative min-h-[440px] sm:min-h-[560px] lg:min-h-[780px] w-full overflow-hidden order-2 lg:order-1">
+          <img
+            src="/images/split-commitment.webp"
+            alt={isEs ? 'Inspirados por tus ideas' : 'Inspired by your ideas'}
+            width={960}
+            height={840}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        </div>
 
-              <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
-                {row.description}
-              </p>
-
-              <ul className="space-y-3 w-full pt-2">
-                {row.points.map((point, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-gray-200">
-                    <CheckCircle2 className="w-5 h-5 text-[#ec186a] shrink-0 mt-0.5" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="pt-2">
-                <a
-                  href={isEs ? '#formulario' : '#contact'}
-                  className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-purple-400 hover:text-white transition-colors group"
-                >
-                  <span>{isEs ? 'Iniciar mi proyecto' : 'Start My Project'}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </div>
-            </div>
+        <div className="bg-[#ffffff] px-8 py-16 sm:p-16 lg:p-[16%] flex flex-col justify-center order-1 lg:order-2">
+          <div
+            className={`salient-fade-bottom ${vis2 ? 'is-visible' : ''}`}
+            style={{ transitionDelay: '0ms' }}
+          >
+            <h5 className="font-dm text-[14px] font-medium text-[#bfbfbf] mb-3">
+              {isEs ? 'Nuestro compromiso' : 'Our Commitment'}
+            </h5>
+            <h2 className="font-gloock text-[32px] sm:text-[38px] lg:text-[42px] leading-[1.18] text-[#000000] font-normal mb-5">
+              {isEs ? 'Inspirados por tus ideas' : 'Inspired by your ideas'}
+            </h2>
           </div>
-        ))}
+
+          <p
+            style={{ transitionDelay: '120ms' }}
+            className={`font-dm text-[15px] sm:text-[16px] leading-[28px] text-[#0a0a0a]/65 font-normal mb-9 salient-fade-bottom ${
+              vis2 ? 'is-visible' : ''
+            }`}
+          >
+            {isEs
+              ? 'En Rueda la Rola Media no “entregamos servicios”: nos subimos a tu viaje. Escuchamos con lupa, trazamos estrategias hechas a medida y te acompañamos en cada hito para que tus objetivos no solo se cumplan, sino que rompan el molde.'
+              : 'At Rueda la Rola Media, we don\'t just "deliver services": we join your journey. We listen carefully, design tailor-made strategies, and stand by you at every milestone so your objectives don\'t just come true, they break the mold.'}
+          </p>
+
+          <div
+            style={{ transitionDelay: '220ms' }}
+            className={`salient-fade-bottom ${vis2 ? 'is-visible' : ''}`}
+          >
+            <a
+              href="#formulario"
+              className="inline-block px-8 py-3.5 border-2 border-black/75 font-dm text-[12px] font-bold uppercase tracking-[1.2px] text-[#000000] hover:bg-[#000000] hover:border-[#000000] hover:text-white transition-colors duration-300"
+            >
+              {isEs ? 'Contacto' : 'Contact'}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Row 3: Left #f4f4f4 Text (padding 10%) | Right Full-Bleed Web Design Office Photo */}
+      <div
+        ref={row3Ref}
+        className="w-full grid grid-cols-1 lg:grid-cols-2 items-stretch bg-[#f4f4f4]"
+      >
+        <div className="bg-[#f4f4f4] px-8 py-16 sm:p-16 lg:p-[16%] flex flex-col justify-center">
+          <div
+            className={`salient-fade-bottom ${vis3 ? 'is-visible' : ''}`}
+            style={{ transitionDelay: '0ms' }}
+          >
+            <h5 className="font-dm text-[14px] font-medium text-[#bfbfbf] mb-3">
+              {isEs ? 'Diseño web' : 'Web Design'}
+            </h5>
+            <h2 className="font-gloock text-[32px] sm:text-[38px] lg:text-[42px] leading-[1.18] text-[#000000] font-normal mb-5">
+              {isEs
+                ? 'Webs que convierten ideas en ingresos'
+                : 'Websites that turn ideas into income'}
+            </h2>
+          </div>
+
+          <p
+            style={{ transitionDelay: '120ms' }}
+            className={`font-dm text-[15px] sm:text-[16px] leading-[28px] text-[#0a0a0a]/65 font-normal salient-fade-bottom ${
+              vis3 ? 'is-visible' : ''
+            }`}
+          >
+            {isEs
+              ? 'Para emprendedores audaces, marcas corporativas exigentes y tiendas online hambrientas de ventas. Unimos UX/UI que enamora, desarrollo sólido y estrategias de conversión para que cada visita cuente.'
+              : 'For bold entrepreneurs, demanding corporate brands, and online stores hungry for sales. We combine standout UX/UI, solid development, and conversion strategies so every visit counts.'}
+          </p>
+        </div>
+
+        <div className="relative min-h-[420px] sm:min-h-[540px] lg:min-h-[660px] w-full overflow-hidden">
+          <img
+            src="/images/split-webdesign.webp"
+            alt={isEs ? 'Diseño Web' : 'Web Design'}
+            width={960}
+            height={740}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        </div>
       </div>
     </section>
   );
