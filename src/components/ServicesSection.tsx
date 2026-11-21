@@ -317,18 +317,26 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ lang }) => {
 
           <p className="font-dm text-[15px] sm:text-[16px] leading-[28px] text-[#333333] font-normal">
             {isEs
-              ? 'Somos una agencia de comunicaciones que ofrece diversos servicios de relaciones públicas. Si deseas tomar una ventaja competitiva, te invitamos a que compruebes cómo pueden ayudarle nuestros servicios de consultoría..'
-              : 'We are a communications agency offering various public relations services. If you want to gain a competitive advantage, we invite you to see how our consulting services can help you..'}
+              ? 'Somos una agencia de comunicaciones que ofrece diversos servicios de relaciones públicas. Si deseas tomar una ventaja competitiva, te invitamos a que compruebes cómo pueden ayudarle nuestros servicios de consultoría.'
+              : 'We are a communications agency offering various public relations services. If you want to gain a competitive advantage, we invite you to see how our consulting services can help you.'}
           </p>
         </div>
 
-        {/* 4x2 Grid of Salient fancy_box (box_style="color_box_hover") Cards */}
+        {/* 4x2 Grid of Salient fancy_box (box_style="color_box_hover") Cards — Clickable to #formulario */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-[26px]">
           {services.map((service, index) => {
-            const colDelay = (index % 4) * 100;
+            const colDelay = (index % 4) * 80;
             return (
-              <div
+              <a
                 key={service.id}
+                href="#formulario"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    window.dispatchEvent(
+                      new CustomEvent('rlr:select-service', { detail: service.title })
+                    );
+                  }
+                }}
                 style={{ transitionDelay: `${colDelay}ms` }}
                 className={`group salient-fancy-box min-h-[340px] lg:min-h-[354px] p-8 lg:p-[36px] flex flex-col justify-between cursor-pointer salient-fade-bottom ${
                   visible ? 'is-visible' : ''
@@ -343,9 +351,12 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ lang }) => {
                 {/* Hover Extra-Color-Gradient-1 Overlay (#d81684 -> #60318a) */}
                 <div className="fancy-box-overlay" />
 
-                {/* Top Iconsmind SVG Icon */}
-                <div className="fancy-box-content pt-1">
+                {/* Top Iconsmind SVG Icon + Subtle Hover CTA Indicator */}
+                <div className="fancy-box-content pt-1 flex items-start justify-between">
                   <IconsmindSvg name={service.iconName} gradId={`svc-grad-${service.id}`} />
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-dm text-[11px] font-semibold uppercase tracking-wider text-white/90 border border-white/40 rounded-full px-3 py-1">
+                    {isEs ? 'Cotizar →' : 'Inquire →'}
+                  </span>
                 </div>
 
                 {/* Bottom Title & Description */}
@@ -357,7 +368,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ lang }) => {
                     {service.description}
                   </p>
                 </div>
-              </div>
+              </a>
             );
           })}
         </div>

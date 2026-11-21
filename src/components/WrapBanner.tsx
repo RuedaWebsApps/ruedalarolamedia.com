@@ -9,22 +9,39 @@ export const WrapBanner: React.FC<WrapBannerProps> = ({ lang }) => {
   const isEs = lang === 'es';
   const sectionRef = useRef<HTMLElement | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const targetProgressRef = useRef(0);
+  const currentProgressRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
 
-  // Replicate Salient scroll_pos_advanced:
-  // transform_y_end="90%", opacity_start="1", opacity_end="0", trigger_offset_start="20%", trigger_offset_end="70%"
+  // Salient scroll_pos_advanced with smooth Lenis-style lerp inertia
   useEffect(() => {
+    const step = () => {
+      const diff = targetProgressRef.current - currentProgressRef.current;
+      if (Math.abs(diff) > 0.0008) {
+        currentProgressRef.current += diff * 0.16;
+        setScrollProgress(currentProgressRef.current);
+        rafRef.current = window.requestAnimationFrame(step);
+      } else {
+        currentProgressRef.current = targetProgressRef.current;
+        setScrollProgress(currentProgressRef.current);
+        rafRef.current = null;
+      }
+    };
+
     const handleScroll = () => {
       const el = sectionRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight || 900;
 
-      // When section top goes from 35% of viewport height down to -25% of viewport height
       const startY = vh * 0.35;
       const endY = -vh * 0.28;
       const raw = (startY - rect.top) / (startY - endY);
-      const clamped = Math.max(0, Math.min(1, raw));
-      setScrollProgress(clamped);
+      targetProgressRef.current = Math.max(0, Math.min(1, raw));
+
+      if (rafRef.current === null) {
+        rafRef.current = window.requestAnimationFrame(step);
+      }
     };
 
     handleScroll();
@@ -33,6 +50,9 @@ export const WrapBanner: React.FC<WrapBannerProps> = ({ lang }) => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
     };
   }, []);
 
@@ -46,7 +66,7 @@ export const WrapBanner: React.FC<WrapBannerProps> = ({ lang }) => {
       className="relative w-full bg-[#6a35ff] text-white py-[5vw] overflow-hidden scroll-mt-[90px] lg:scroll-mt-[136px]"
     >
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10">
-        {/* Scroll-driven Title & Subtitle Block (Salient scroll_pos_advanced) */}
+        {/* Scroll-driven Title & Subtitle Block (Salient scroll_pos_advanced with smooth lerp) */}
         <div
           style={{
             transform: `translate3d(0, ${translateYPercent.toFixed(2)}%, 0)`,
@@ -71,7 +91,7 @@ export const WrapBanner: React.FC<WrapBannerProps> = ({ lang }) => {
             }}
           >
             {isEs
-              ? 'Gráficos de vehículos Escaparates Vehículos de flota Murales de pared POP/Ferias comerciales Señalización exterior Gráficos de suelo'
+              ? 'Gráficos de vehículos, escaparates, vehículos de flota, murales de pared, POP/ferias comerciales, señalización exterior y gráficos de suelo'
               : 'Vehicle Graphics, Storefronts, Fleet Vehicles, Wall Murals, POP/Trade Shows, Outdoor Signage, Floor Graphics'}
           </p>
         </div>

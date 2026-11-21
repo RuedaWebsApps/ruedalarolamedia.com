@@ -79,7 +79,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
                 className="inline-block mb-6 transition-transform duration-300 hover:scale-105"
               >
                 <img
-                  src="/images/wp/408_logo-en-blanco-e1745966879628.png"
+                  src="/images/logo-nav.webp"
                   alt="Rueda La Rola Media"
                   width={133}
                   height={143}
@@ -87,7 +87,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
                 />
               </a>
 
-              {/* split_line_heading letter-reveal-bottom H1 "Contacto" (6vw, max 108px) */}
+              {/* split_line_heading letter-reveal-bottom H1 (6vw, max 108px) */}
               <h1
                 className="font-gloock text-white font-normal tracking-normal mb-5 overflow-hidden"
                 style={{
@@ -96,7 +96,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
                 }}
               >
                 <span className="inline-block animate-rev-line-1">
-                  Contacto
+                  {isEs ? 'Contacto' : 'Contact'}
                 </span>
               </h1>
 
@@ -171,14 +171,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
 
                   <div>
                     <label htmlFor="ff_contact_firstName" className="sr-only">
-                      Nombres
+                      {isEs ? 'Nombres' : 'Full Name'}
                     </label>
                     <input
                       id="ff_contact_firstName"
                       type="text"
                       name="firstName"
                       required
-                      placeholder="Nombres"
+                      placeholder={isEs ? 'Nombres' : 'Full Name'}
                       value={formData.firstName}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-white/15 border border-white/30 rounded-[4px] font-dm text-[15px] text-white placeholder-white/80 focus:outline-none focus:border-white transition-colors"
@@ -187,14 +187,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
 
                   <div>
                     <label htmlFor="ff_contact_email" className="sr-only">
-                      Email
+                      {isEs ? 'Email' : 'Email Address'}
                     </label>
                     <input
                       id="ff_contact_email"
                       type="email"
                       name="email"
                       required
-                      placeholder="Email"
+                      placeholder={isEs ? 'Email' : 'Email Address'}
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-white/15 border border-white/30 rounded-[4px] font-dm text-[15px] text-white placeholder-white/80 focus:outline-none focus:border-white transition-colors"
@@ -203,14 +203,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
 
                   <div>
                     <label htmlFor="ff_contact_phone" className="sr-only">
-                      Celular
+                      {isEs ? 'Celular' : 'Phone Number'}
                     </label>
                     <input
                       id="ff_contact_phone"
                       type="tel"
                       name="phone"
                       required
-                      placeholder="Celular"
+                      placeholder={isEs ? 'Celular' : 'Phone Number'}
                       value={formData.phone}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-white/15 border border-white/30 rounded-[4px] font-dm text-[15px] text-white placeholder-white/80 focus:outline-none focus:border-white transition-colors"
@@ -219,14 +219,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
 
                   <div>
                     <label htmlFor="ff_contact_message" className="sr-only">
-                      Mensaje
+                      {isEs ? 'Mensaje' : 'Message'}
                     </label>
                     <textarea
                       id="ff_contact_message"
                       name="message"
                       rows={3}
                       required
-                      placeholder="Mensaje"
+                      placeholder={isEs ? 'Mensaje' : 'Tell us about your project...'}
                       value={formData.message}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-white/15 border border-white/30 rounded-[4px] font-dm text-[15px] text-white placeholder-white/80 focus:outline-none focus:border-white transition-colors resize-y"
@@ -257,13 +257,15 @@ export const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
                     <button
                       type="submit"
                       disabled={status === 'submitting'}
-                      className="inline-flex items-center justify-center min-w-[151px] h-[54px] px-7 bg-[#ffffff] text-[#6a35ff] border border-white rounded-[4px] font-dm text-[16px] font-medium hover:bg-[#e2dddd] hover:text-white transition-colors duration-200 cursor-pointer disabled:opacity-60"
+                      className="inline-flex items-center justify-center min-w-[151px] h-[54px] px-7 bg-[#ffffff] text-[#6a35ff] border border-white rounded-[4px] font-dm text-[16px] font-medium hover:bg-[#e2dddd] hover:text-[#141c27] transition-colors duration-200 cursor-pointer disabled:opacity-60"
                     >
                       {status === 'submitting'
                         ? isEs
                           ? 'Enviando...'
                           : 'Sending...'
-                        : 'Agendar cita'}
+                        : isEs
+                        ? 'Agendar cita'
+                        : 'Book Appointment'}
                     </button>
                   </div>
                 </form>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Language } from '../types';
 import { navItemsEn, navItemsEs } from '../content/siteContent';
 
@@ -7,29 +7,61 @@ interface NavbarProps {
   currentPath?: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ lang }) => {
+export const Navbar: React.FC<NavbarProps> = ({ lang, currentPath = '/' }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [pastHeroLogo, setPastHeroLogo] = useState(false);
+
   const isEs = lang === 'es';
   const navItems = isEs ? navItemsEs : navItemsEn;
+  const isHomePage = currentPath === '/' || currentPath === '/es';
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      setScrolled(y > 36);
+      setPastHeroLogo(y > 140);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // On Homepage top, avoid double vinyl logo stacked directly over the Hero 3D vinyl logo
+  const showNavLogo = !isHomePage || pastHeroLogo;
 
   return (
     <header
       id="header-outer"
-      className="w-full bg-[#000000] text-white sticky top-0 z-50 animate-salient-header"
+      className={`w-full text-white sticky top-0 z-50 animate-salient-header transition-all duration-300 ${
+        scrolled
+          ? 'bg-[#000000]/92 backdrop-blur-md border-b border-white/10 shadow-[0_12px_35px_rgba(0,0,0,0.55)]'
+          : 'bg-[#000000]'
+      }`}
     >
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-[90px] h-[90px] lg:h-[136px] flex items-center justify-between">
-        {/* Left Brand Vinyl Logo */}
+      <div
+        className={`max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-[90px] flex items-center justify-between transition-all duration-300 ${
+          scrolled ? 'h-[72px] lg:h-[82px]' : 'h-[86px] lg:h-[124px]'
+        }`}
+      >
+        {/* Left Brand Vinyl Logo (Reveals on scroll on Homepage to avoid double-logo clash with Hero 3D logo) */}
         <a
           href={isEs ? '/es' : '/'}
           aria-label="Rueda La Rola Media"
-          className="inline-flex items-center shrink-0 focus:outline-none"
+          className={`inline-flex items-center shrink-0 focus:outline-none transition-all duration-300 ${
+            showNavLogo
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 -translate-y-2 pointer-events-none lg:w-[75px]'
+          }`}
         >
           <img
-            src="/images/wp/408_logo-en-blanco-e1745966879628.png"
+            src="/images/logo-nav.webp"
             alt="Rueda La Rola Media"
             width={75}
             height={80}
-            className="h-[54px] lg:h-[80px] w-auto object-contain transition-transform duration-300 hover:scale-105"
+            className={`w-auto object-contain transition-all duration-300 hover:scale-105 ${
+              scrolled ? 'h-[46px] lg:h-[54px]' : 'h-[52px] lg:h-[74px]'
+            }`}
           />
         </a>
 
@@ -51,12 +83,12 @@ export const Navbar: React.FC<NavbarProps> = ({ lang }) => {
           ))}
         </nav>
 
-        {/* Right Language Switcher Links (EN / ES) matching Salient Secondary Right Menu */}
+        {/* Right Language Switcher Links (EN / ES) */}
         <div className="hidden lg:flex items-center gap-6 font-dm text-[15px] font-normal">
           <a
             href="/"
             className={`nectar-text-reveal-link py-1 ${
-              !isEs ? 'text-white font-medium' : 'text-white/80 hover:text-white'
+              !isEs ? 'text-white font-semibold' : 'text-white/75 hover:text-white'
             }`}
             aria-label="English"
           >
@@ -67,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({ lang }) => {
           <a
             href="/es"
             className={`nectar-text-reveal-link py-1 ${
-              isEs ? 'text-white font-medium' : 'text-white/80 hover:text-white'
+              isEs ? 'text-white font-semibold' : 'text-white/75 hover:text-white'
             }`}
             aria-label="Español"
           >
@@ -124,7 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({ lang }) => {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="lg:hidden bg-[#000000] border-t border-white/10 px-6 py-6 space-y-4 font-dm text-lg">
+        <div className="lg:hidden bg-[#000000]/95 backdrop-blur-md border-t border-white/10 px-6 py-6 space-y-4 font-dm text-lg">
           {navItems.map((item) => (
             <a
               key={item.id}

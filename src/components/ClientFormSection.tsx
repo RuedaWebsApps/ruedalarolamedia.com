@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Language, ContactFormData, ContactSubmissionStatus } from '../types';
 import { clientLogos } from '../content/siteContent';
 import { submitContactForm } from '../adapters/contactAdapter';
@@ -10,6 +10,8 @@ interface ClientFormSectionProps {
 
 export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) => {
   const isEs = lang === 'es';
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedServiceLabel, setSelectedServiceLabel] = useState<string>('');
 
   const [formData, setFormData] = useState<ContactFormData>({
     firstName: '',
@@ -23,6 +25,32 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
 
   const [status, setStatus] = useState<ContactSubmissionStatus>('idle');
   const [feedback, setFeedback] = useState('');
+
+  // Listen for clicks on the 8 Salient fancy_box cards in #servicios
+  useEffect(() => {
+    const onSelectService = (e: Event) => {
+      const custom = e as CustomEvent<string>;
+      const svc = custom.detail;
+      if (svc) {
+        setSelectedServiceLabel(svc);
+        setFormData((prev) => ({
+          ...prev,
+          service: svc,
+          message: prev.message
+            ? prev.message
+            : isEs
+            ? `Hola, me interesa cotizar el servicio de ${svc}. `
+            : `Hi, I would like to inquire about ${svc}. `,
+        }));
+        window.setTimeout(() => {
+          nameInputRef.current?.focus();
+        }, 450);
+      }
+    };
+
+    window.addEventListener('rlr:select-service', onSelectService);
+    return () => window.removeEventListener('rlr:select-service', onSelectService);
+  }, [isEs]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,6 +67,7 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
     if (res.ok) {
       setStatus('success');
       setFeedback(res.message);
+      setSelectedServiceLabel('');
       setFormData({
         firstName: '',
         lastName: '',
@@ -108,7 +137,7 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
               {tickerItems.map((logo, idx) => (
                 <div
                   key={`${logo.name}-${idx}`}
-                  className="w-[155px] sm:w-[175px] shrink-0 overflow-hidden"
+                  className="w-[155px] sm:w-[175px] shrink-0 overflow-hidden rounded-[6px]"
                 >
                   <img
                     src={logo.image}
@@ -125,9 +154,25 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
 
         {/* Right Column (width="1/3" -> 4 cols): Centered Title + Fluent Form #1 */}
         <div className="lg:col-span-4 w-full max-w-[440px] mx-auto lg:mx-0">
-          <h3 className="font-gloock text-[20px] sm:text-[22px] leading-[1.3] font-bold text-white text-center mb-7">
+          <h3 className="font-gloock text-[20px] sm:text-[22px] leading-[1.3] font-bold text-white text-center mb-5">
             {isEs ? 'Agenda una cita con nosotros' : 'Schedule an appointment with us'}
           </h3>
+
+          {selectedServiceLabel && (
+            <div className="mb-4 px-3.5 py-2 rounded-[4px] bg-[#6a35ff]/25 border border-[#6a35ff]/60 flex items-center justify-between text-xs font-dm text-white">
+              <span>
+                {isEs ? 'Servicio:' : 'Service:'} <strong>{selectedServiceLabel}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedServiceLabel('')}
+                className="text-white/70 hover:text-white ml-2"
+                aria-label="Clear service"
+              >
+                ✕
+              </button>
+            </div>
+          )}
 
           {status === 'success' ? (
             <div className="p-6 rounded-lg bg-white/10 border border-white/25 text-center space-y-4">
@@ -159,14 +204,15 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
 
               <div>
                 <label htmlFor="ff_home_firstName" className="sr-only">
-                  Nombres
+                  {isEs ? 'Nombres' : 'Full Name'}
                 </label>
                 <input
+                  ref={nameInputRef}
                   id="ff_home_firstName"
                   type="text"
                   name="firstName"
                   required
-                  placeholder="Nombres"
+                  placeholder={isEs ? 'Nombres' : 'Full Name'}
                   value={formData.firstName}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-[4px] font-dm text-[15px] text-white placeholder-white/65 focus:outline-none focus:border-white transition-colors"
@@ -175,14 +221,14 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
 
               <div>
                 <label htmlFor="ff_home_email" className="sr-only">
-                  Email
+                  {isEs ? 'Email' : 'Email Address'}
                 </label>
                 <input
                   id="ff_home_email"
                   type="email"
                   name="email"
                   required
-                  placeholder="Email"
+                  placeholder={isEs ? 'Email' : 'Email Address'}
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-[4px] font-dm text-[15px] text-white placeholder-white/65 focus:outline-none focus:border-white transition-colors"
@@ -191,14 +237,14 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
 
               <div>
                 <label htmlFor="ff_home_phone" className="sr-only">
-                  Celular
+                  {isEs ? 'Celular' : 'Phone Number'}
                 </label>
                 <input
                   id="ff_home_phone"
                   type="tel"
                   name="phone"
                   required
-                  placeholder="Celular"
+                  placeholder={isEs ? 'Celular' : 'Phone Number'}
                   value={formData.phone}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-[4px] font-dm text-[15px] text-white placeholder-white/65 focus:outline-none focus:border-white transition-colors"
@@ -207,14 +253,14 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
 
               <div>
                 <label htmlFor="ff_home_message" className="sr-only">
-                  Mensaje
+                  {isEs ? 'Mensaje' : 'Message'}
                 </label>
                 <textarea
                   id="ff_home_message"
                   name="message"
                   rows={3}
                   required
-                  placeholder="Mensaje"
+                  placeholder={isEs ? 'Mensaje' : 'Tell us about your project...'}
                   value={formData.message}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-[4px] font-dm text-[15px] text-white placeholder-white/65 focus:outline-none focus:border-white transition-colors resize-y"
@@ -238,18 +284,20 @@ export const ClientFormSection: React.FC<ClientFormSectionProps> = ({ lang }) =>
                 {SMS_CONSENT[lang].after}
               </p>
 
-              {/* Exact Fluent Form #1 Centered White Button: 151x59px, bg #ffffff, color #6a35ff, hover bg #e2dddd color #ffffff */}
+              {/* Exact Fluent Form #1 Centered White Button */}
               <div className="text-center pt-1">
                 <button
                   type="submit"
                   disabled={status === 'submitting'}
-                  className="inline-flex items-center justify-center min-w-[151px] h-[54px] px-7 bg-[#ffffff] text-[#6a35ff] border border-white rounded-[4px] font-dm text-[16px] font-medium hover:bg-[#e2dddd] hover:text-white transition-colors duration-200 cursor-pointer disabled:opacity-60"
+                  className="inline-flex items-center justify-center min-w-[151px] h-[54px] px-7 bg-[#ffffff] text-[#6a35ff] border border-white rounded-[4px] font-dm text-[16px] font-medium hover:bg-[#e2dddd] hover:text-[#141c27] transition-colors duration-200 cursor-pointer disabled:opacity-60"
                 >
                   {status === 'submitting'
                     ? isEs
                       ? 'Enviando...'
                       : 'Sending...'
-                    : 'Agendar cita'}
+                    : isEs
+                    ? 'Agendar cita'
+                    : 'Book Appointment'}
                 </button>
               </div>
             </form>

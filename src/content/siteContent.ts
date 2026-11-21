@@ -25,7 +25,7 @@ export const navItemsEn: NavItem[] = [
   { id: 'services', label: 'Services', href: '/#servicios' },
   { id: 'portfolio', label: 'Portfolio', href: '/#portafolio' },
   { id: 'blog', label: 'Blog', href: '/blog' },
-  { id: 'contact', label: 'Contact', href: '/contacto' },
+  { id: 'contact', label: 'Contact', href: '/contact' },
 ];
 
 export const navItemsEs: NavItem[] = [
@@ -36,13 +36,13 @@ export const navItemsEs: NavItem[] = [
   { id: 'contact', label: 'Contacto', href: '/contacto' },
 ];
 
-// Exact 8 Salient fancy_box cards from WP Page ID 17 (English)
+// 8 Salient fancy_box cards (English) — with corrected Digital Marketing copy
 export const servicesEn: ServiceItem[] = [
   {
     id: 'brand-design',
     title: 'Brand Design',
     tagline: 'iconsmind-Crown-2',
-    description: 'Your essence, transformed into an unforgettable icon',
+    description: 'Your essence, transformed into an unforgettable icon.',
     features: [],
     iconName: 'crown',
     image: '/images/service-brand.webp',
@@ -51,7 +51,7 @@ export const servicesEn: ServiceItem[] = [
     id: 'web-design',
     title: 'Web Design',
     tagline: 'iconsmind-Duplicate-Layer',
-    description: 'Fast architecture, responsive design, and interactive storytelling merge to make your brand shine',
+    description: 'Fast architecture, responsive design, and interactive storytelling merge to make your brand shine.',
     features: [],
     iconName: 'layers',
     image: '/images/service-web.webp',
@@ -60,16 +60,16 @@ export const servicesEn: ServiceItem[] = [
     id: 'merch-design',
     title: 'Merchadesign',
     tagline: 'iconsmind-Monitor-phone',
-    description: 'Objects that become ambassadors for your brand.',
+    description: 'Objects and custom merchandise that become everyday ambassadors for your brand.',
     features: [],
     iconName: 'monitor-phone',
     image: '/images/service-mercha.webp',
   },
   {
     id: 'branding',
-    title: 'Branding & Brand Design',
+    title: 'Branding & Visual Identity',
     tagline: 'iconsmind-Refresh',
-    description: 'Memorable identities that beat both on and off the screen.',
+    description: 'Memorable identities, naming, and style guides that beat both on and off the screen.',
     features: [],
     iconName: 'refresh',
     image: '/images/service-brand.webp',
@@ -96,7 +96,7 @@ export const servicesEn: ServiceItem[] = [
     id: 'marketing',
     title: 'Digital Marketing',
     tagline: 'iconsmind-Newsvine',
-    description: 'Naming, logo, complete visual identity, and style guides.',
+    description: 'Targeted ad campaigns, local SEO, social growth strategies, and conversion funnels that turn clicks into clients.',
     features: [],
     iconName: 'newsvine',
     image: '/images/service-marketing.webp',
@@ -112,13 +112,13 @@ export const servicesEn: ServiceItem[] = [
   },
 ];
 
-// Exact 8 Salient fancy_box cards from WP Page ID 906 (Spanish)
+// 8 Salient fancy_box cards (Spanish) — with corrected Marketing digital copy
 export const servicesEs: ServiceItem[] = [
   {
     id: 'brand-design',
     title: 'Diseño de Marca',
     tagline: 'iconsmind-Crown-2',
-    description: 'Tu esencia, convertida en un ícono inolvidable',
+    description: 'Tu esencia, convertida en un ícono inolvidable.',
     features: [],
     iconName: 'crown',
     image: '/images/service-brand.webp',
@@ -127,7 +127,7 @@ export const servicesEs: ServiceItem[] = [
     id: 'web-design',
     title: 'Diseño web',
     tagline: 'iconsmind-Duplicate-Layer',
-    description: 'Arquitectura veloz, diseño responsive y storytelling interactivo se fusionan para que tu marca deslumbre',
+    description: 'Arquitectura veloz, diseño responsive y storytelling interactivo se fusionan para que tu marca deslumbre.',
     features: [],
     iconName: 'layers',
     image: '/images/service-web.webp',
@@ -136,7 +136,7 @@ export const servicesEs: ServiceItem[] = [
     id: 'merch-design',
     title: 'Merchadesign',
     tagline: 'iconsmind-Monitor-phone',
-    description: 'Objetos que se vuelven embajadores de tu marca.',
+    description: 'Objetos y artículos personalizados que se vuelven embajadores de tu marca.',
     features: [],
     iconName: 'monitor-phone',
     image: '/images/service-mercha.webp',
@@ -145,7 +145,7 @@ export const servicesEs: ServiceItem[] = [
     id: 'branding',
     title: 'Branding & diseño de marca',
     tagline: 'iconsmind-Refresh',
-    description: 'Identidades memorables que laten dentro y fuera de la pantalla.',
+    description: 'Identidades memorables, naming y guías de estilo que laten dentro y fuera de la pantalla.',
     features: [],
     iconName: 'refresh',
     image: '/images/service-brand.webp',
@@ -163,7 +163,7 @@ export const servicesEs: ServiceItem[] = [
     id: 'wrap',
     title: 'Wrap',
     tagline: 'iconsmind-Flash',
-    description: 'Gráficos de vehículos Escaparates Vehículos de flota Murales de pared POP/Ferias comerciales Señalización exterior Gráficos de suelo.',
+    description: 'Gráficos de vehículos, escaparates, vehículos de flota, murales de pared, POP/ferias comerciales, señalización exterior y gráficos de suelo.',
     features: [],
     iconName: 'flash',
     image: '/images/service-animation.webp',
@@ -172,7 +172,7 @@ export const servicesEs: ServiceItem[] = [
     id: 'marketing',
     title: 'Marketing digital',
     tagline: 'iconsmind-Newsvine',
-    description: 'Naming, logotipo, identidad visual completa y guías de estilo.',
+    description: 'Campañas de anuncios, posicionamiento SEO, gestión estratégica de redes y embudos que convierten visitas en clientes.',
     features: [],
     iconName: 'newsvine',
     image: '/images/service-marketing.webp',
@@ -197,7 +197,7 @@ export interface LogofolioBrandSection {
   carouselImages: string[];
 }
 
-export const logofolioHeaderBanner = '/images/wp/646_1.png';
+export const logofolioHeaderBanner = '/images/wp/646_1.webp';
 
 export const logofolioBrandSections: LogofolioBrandSection[] = [
   {
@@ -344,21 +344,26 @@ export const portfolioItems: PortfolioItem[] = [
     year: '2025',
     category: '',
     image: '/images/wp/702_logo8.2.webp',
-    summary: 'ABRIL 29, 2025',
-    description: 'LOGOFOLIO Vol. 1 — Identidad visual y diseño de marcas.',
+    summary: 'APRIL 29, 2025',
+    description: 'LOGOFOLIO Vol. 1 — Comprehensive brand identity systems, custom typography, and real-world applications.',
     highlights: [],
   },
   {
     id: 'innk',
     slug: 'luminara',
     title: 'Innk',
-    client: 'Innk',
+    client: 'Innk Creative Studio',
     year: '2024',
     category: 'BRANDING',
-    image: '/images/wp/507_proyect-4.png',
-    summary: 'MARZO 24, 2025',
-    description: 'Proyecto 4',
-    highlights: ['/images/wp/359_danielle-suijkerbuijk-ntnkDuf-tH8-unsplash-scaled-1.webp', '/images/wp/507_proyect-4.png'],
+    image: '/images/portfolio-innk.webp',
+    summary: 'MARCH 24, 2025',
+    description:
+      'Comprehensive visual identity, 3D character direction, and digital storytelling platform designed for Innk Creative Studio ("Indelible Stories — Ignite Massive Change").',
+    highlights: [
+      'Complete brand architecture, custom logotype, and vibrant indigo/violet color system',
+      'Interactive web direction and high-impact 3D visual storytelling showcase',
+      'Cohesive social media and digital campaign guidelines',
+    ],
   },
   {
     id: 'alery',
@@ -367,10 +372,15 @@ export const portfolioItems: PortfolioItem[] = [
     client: 'Alery',
     year: '2024',
     category: 'FILM',
-    image: '/images/wp/506_proyect-3.png',
-    summary: 'FEBRERO 28, 2025',
-    description: 'Alery',
-    highlights: ['/images/wp/506_proyect-3.png'],
+    image: '/images/portfolio-alery.webp',
+    summary: 'FEBRUARY 28, 2025',
+    description:
+      'Audiovisual art direction, motion graphics system, and multi-screen brand presentation developed for Alery to captivate audiences across digital and physical channels.',
+    highlights: [
+      'Art direction, visual narrative, and motion identity system',
+      'Multi-format assets engineered for digital video, reels, and commercial displays',
+      'High-contrast editorial typography and visual guidelines',
+    ],
   },
   {
     id: 'brioche',
@@ -379,14 +389,83 @@ export const portfolioItems: PortfolioItem[] = [
     client: 'Brioche',
     year: '2023',
     category: 'WEB DESIGN',
-    image: '/images/wp/504_proyect-1.png',
-    summary: 'FEBRERO 24, 2025',
-    description: 'Soluciones que transforman ideas',
-    highlights: ['/images/wp/504_proyect-1.png'],
+    image: '/images/portfolio-brioche.webp',
+    summary: 'FEBRUARY 24, 2025',
+    description:
+      'High-conversion web experience, digital menu architecture, and warm visual branding crafted to turn online visitors into loyal daily customers.',
+    highlights: [
+      'Responsive UI/UX design focused on visual appetite and fast mobile ordering',
+      'Custom photography art direction and cohesive brand palette',
+      'Optimized site architecture for local search visibility and customer retention',
+    ],
   },
 ];
 
-export const portfolioItemsEs: PortfolioItem[] = portfolioItems;
+export const portfolioItemsEs: PortfolioItem[] = [
+  {
+    id: 'logos-design',
+    slug: 'logos-design',
+    title: 'Logos design',
+    client: 'Rueda La Rola Media',
+    year: '2025',
+    category: '',
+    image: '/images/wp/702_logo8.2.webp',
+    summary: 'ABRIL 29, 2025',
+    description: 'LOGOFOLIO Vol. 1 — Sistemas de identidad visual, tipografía a medida y aplicaciones reales de marca.',
+    highlights: [],
+  },
+  {
+    id: 'innk',
+    slug: 'luminara',
+    title: 'Innk',
+    client: 'Innk Creative Studio',
+    year: '2024',
+    category: 'BRANDING',
+    image: '/images/portfolio-innk.webp',
+    summary: 'MARZO 24, 2025',
+    description:
+      'Identidad visual integral, dirección de arte 3D y ecosistema digital interactivo desarrollado para Innk Creative Studio ("Indelible Stories — Ignite Massive Change").',
+    highlights: [
+      'Arquitectura de marca completa, logotipo a medida y sistema cromático índigo/violeta',
+      'Dirección web interactiva y presentación de portafolio de animación y narrativa visual',
+      'Guías de estilo para campañas digitales y redes sociales',
+    ],
+  },
+  {
+    id: 'alery',
+    slug: 'astralis',
+    title: 'Alery',
+    client: 'Alery',
+    year: '2024',
+    category: 'FILM',
+    image: '/images/portfolio-alery.webp',
+    summary: 'FEBRERO 28, 2025',
+    description:
+      'Dirección de arte audiovisual, sistema de motion graphics y presentación de marca multipantalla diseñada para conectar con la audiencia en formatos digitales y comerciales.',
+    highlights: [
+      'Dirección de arte, narrativa visual y sistema de identidad en movimiento',
+      'Activos multiformato optimizados para video digital, reels y pantallas comerciales',
+      'Jerarquía tipográfica editorial de alto impacto',
+    ],
+  },
+  {
+    id: 'brioche',
+    slug: 'spectral',
+    title: 'Brioche',
+    client: 'Brioche',
+    year: '2023',
+    category: 'WEB DESIGN',
+    image: '/images/portfolio-brioche.webp',
+    summary: 'FEBRERO 24, 2025',
+    description:
+      'Soluciones digitales que transforman ideas: diseño web de alta conversión, experiencia móvil fluida e identidad visual cálida orientada a ventas.',
+    highlights: [
+      'Diseño UX/UI responsive enfocado en conversión y experiencia móvil',
+      'Dirección fotográfica de producto y paleta de marca coherente',
+      'Arquitectura optimizada para posicionamiento local y fidelización de clientes',
+    ],
+  },
+];
 
 // Exact 5 client sample images used in the #formulario Flickity ticker carousel (IDs 699, 691, 711, 683, 676)
 export const clientLogos = [

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Language } from '../types';
 import { LEGAL_KINDS, legalPath, legalLabel } from '../legal/legalDocs';
+import { siteMetadata } from '../content/siteContent';
 
 interface FooterProps {
   lang: Language;
@@ -24,28 +25,28 @@ export const Footer: React.FC<FooterProps> = ({
       slug: 'spectral',
       title: 'Brioche',
       category: 'WEB DESIGN',
-      date: 'FEBRERO 24, 2025',
-      image: '/images/wp/504_proyect-1.png',
+      date: isEs ? 'FEBRERO 24, 2025' : 'FEBRUARY 24, 2025',
+      image: '/images/portfolio-brioche.webp',
     },
     {
       slug: 'astralis',
       title: 'Alery',
       category: 'FILM',
-      date: 'FEBRERO 28, 2025',
-      image: '/images/wp/506_proyect-3.png',
+      date: isEs ? 'FEBRERO 28, 2025' : 'FEBRUARY 28, 2025',
+      image: '/images/portfolio-alery.webp',
     },
     {
       slug: 'luminara',
       title: 'Innk',
       category: 'BRANDING',
-      date: 'MARZO 24, 2025',
-      image: '/images/wp/507_proyect-4.png',
+      date: isEs ? 'MARZO 24, 2025' : 'MARCH 24, 2025',
+      image: '/images/portfolio-innk.webp',
     },
     {
       slug: 'logos-design',
       title: 'Logos design',
       category: 'BRANDING',
-      date: 'ABRIL 29, 2025',
+      date: isEs ? 'ABRIL 29, 2025' : 'APRIL 29, 2025',
       image: '/images/wp/702_logo8.2.webp',
     },
   ]
@@ -57,7 +58,7 @@ export const Footer: React.FC<FooterProps> = ({
       {/* Main Purple Footer Row (bg_color="#6a35ff", 3 equal columns + 10px copyright) */}
       <div className="w-full bg-[#6a35ff] text-white py-[36px] px-6 sm:px-10 lg:px-[90px]">
         <div className="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-[30px]">
-          {/* Column 1: Floating Left White Vinyl Logo + Paragraph */}
+          {/* Column 1: Floating Left White Vinyl Logo + Paragraph + Direct Contact Info */}
           <div className="lg:p-[5%] font-dm text-[15px] leading-[26px] text-white">
             <a
               href={isEs ? '/es' : '/'}
@@ -65,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({
               aria-label="Rueda La Rola Media"
             >
               <img
-                src="/images/wp/408_logo-en-blanco-e1745966879628.png"
+                src="/images/logo-nav.webp"
                 alt="Rueda La Rola Media"
                 width={60}
                 height={64}
@@ -78,9 +79,22 @@ export const Footer: React.FC<FooterProps> = ({
                 : 'At Rueda La Rola Media, we transform your ideas into reality. From your brand design to digital and physical solutions, we have everything you need to stand out!'}
             </p>
             <div className="clear-both" />
+
+            {/* Direct Contact & Location Links */}
+            <div className="mt-4 pt-3 border-t border-white/15 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-white/90">
+              <a href={`mailto:${siteMetadata.email}`} className="hover:text-white hover:underline">
+                {siteMetadata.email}
+              </a>
+              <span>·</span>
+              <a href={`tel:${siteMetadata.phoneRaw}`} className="hover:text-white hover:underline">
+                {siteMetadata.phone}
+              </a>
+              <span>·</span>
+              <span>Austin, TX</span>
+            </div>
           </div>
 
-          {/* Column 2: Services List */}
+          {/* Column 2: Services List (Fixed "Merchadesign" spelling) */}
           <div className="lg:p-[5%] font-dm text-[15px] leading-[28px] text-white">
             <p className="font-bold text-white mb-1">
               {isEs ? 'Servicios' : 'Services'}
@@ -98,7 +112,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <a href={isEs ? '/es#servicios' : '/#servicios'} className="hover:underline">
-                  {isEs ? 'Merchandesign' : 'Merchadesign'}
+                  Merchadesign
                 </a>
               </li>
               <li>
@@ -119,8 +133,8 @@ export const Footer: React.FC<FooterProps> = ({
             <p className="font-bold text-white">
               {isEs ? 'Proyectos recientes' : 'Recent projects'}
             </p>
-            <p className="text-white mb-3">
-              {isEs ? 'Marketing digital' : 'Digital marketing'}
+            <p className="text-white/90 text-[13px] mb-3">
+              Branding — Innk
             </p>
 
             <a
@@ -128,7 +142,7 @@ export const Footer: React.FC<FooterProps> = ({
               className="group relative block w-[150px] h-[110px] rounded-[6px] overflow-hidden bg-[#141414] shadow-md"
             >
               <img
-                src="/images/wp/507_proyect-4.png"
+                src="/images/portfolio-innk.webp"
                 alt="Innk"
                 width={200}
                 height={150}
@@ -169,13 +183,13 @@ export const Footer: React.FC<FooterProps> = ({
             {/* Top Row: "Explore More Work" left | "View All →" right */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-12">
               <h2 className="font-gloock text-[32px] sm:text-[42px] lg:text-[48px] text-white font-normal">
-                Explore More Work
+                {isEs ? 'Explorar Más Proyectos' : 'Explore More Work'}
               </h2>
               <a
                 href={isEs ? '/es#portafolio' : '/#portafolio'}
                 className="inline-flex items-center gap-2 font-dm text-[15px] font-medium text-white hover:text-white/80 transition-transform duration-300 hover:translate-x-1"
               >
-                <span>View All</span>
+                <span>{isEs ? 'Ver Todos' : 'View All'}</span>
                 <span aria-hidden="true">→</span>
               </a>
             </div>

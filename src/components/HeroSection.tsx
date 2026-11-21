@@ -5,19 +5,23 @@ interface HeroSectionProps {
   lang: Language;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = () => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
+  const isEs = lang === 'es';
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
+  const targetParallaxRef = useRef({ x: 0, y: 0 });
 
-  // Interactive 3D Low-Poly ParticleWave Canvas (Slider Revolution 7 tp-particlewave replica)
+  // Interactive 3D Low-Poly ParticleWave Canvas with Smart IntersectionObserver GPU Auto-Pause
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const section = sectionRef.current;
+    if (!canvas || !section) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationFrameId = 0;
+    let isHeroVisible = true;
     let width = (canvas.width = canvas.offsetWidth || 1440);
     let height = (canvas.height = canvas.offsetHeight || 790);
 
@@ -32,8 +36,7 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
     const cols = 22;
     const rows = 14;
 
-    // Floating ambient particles
-    const dots = Array.from({ length: 36 }, (_, i) => ({
+    const dots = Array.from({ length: 34 }, (_, i) => ({
       x: ((i * 97) % 100) / 100,
       y: ((i * 53) % 100) / 100,
       r: 0.8 + (i % 3) * 0.6,
@@ -42,10 +45,12 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
     }));
 
     const render = (time: number) => {
+      if (!isHeroVisible) return;
+
       const t = time * 0.0012;
       ctx.clearRect(0, 0, width, height);
 
-      // Base radial gradient matching RevSlider bg: radial-gradient(circle, rgba(66,20,74,1) 0%, rgba(21,2,24,1) 100%)
+      // Base radial gradient matching RevSlider bg
       const baseGrad = ctx.createRadialGradient(
         width * 0.28,
         height * 0.45,
@@ -89,7 +94,6 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
           const p01 = pts[r + 1][c];
           const p11 = pts[r + 1][c + 1];
 
-          // Triangle 1
           const shade1 = (p00.z + p10.z + p01.z) / 130;
           const lum1 = Math.max(0.04, Math.min(0.32, 0.13 + shade1 * 0.16));
           ctx.beginPath();
@@ -105,7 +109,6 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
           ctx.lineWidth = 0.6;
           ctx.stroke();
 
-          // Triangle 2
           const shade2 = (p10.z + p11.z + p01.z) / 130;
           const lum2 = Math.max(0.03, Math.min(0.28, 0.11 + shade2 * 0.15));
           ctx.beginPath();
@@ -136,9 +139,25 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
       animationFrameId = window.requestAnimationFrame(render);
     };
 
+    // Pause canvas 3D loop when Hero is offscreen to guarantee 100% free GPU on lower sections
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isHeroVisible = entry.isIntersecting;
+        if (isHeroVisible) {
+          window.cancelAnimationFrame(animationFrameId);
+          animationFrameId = window.requestAnimationFrame(render);
+        } else {
+          window.cancelAnimationFrame(animationFrameId);
+        }
+      },
+      { threshold: 0.02 }
+    );
+    observer.observe(section);
+
     animationFrameId = window.requestAnimationFrame(render);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', handleResize);
       window.cancelAnimationFrame(animationFrameId);
     };
@@ -149,10 +168,12 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
     if (!rect) return;
     const normX = (e.clientX - rect.left) / rect.width - 0.5;
     const normY = (e.clientY - rect.top) / rect.height - 0.5;
+    targetParallaxRef.current = { x: normX, y: normY };
     setParallax({ x: normX, y: normY });
   };
 
   const handleMouseLeave = () => {
+    targetParallaxRef.current = { x: 0, y: 0 };
     setParallax({ x: 0, y: 0 });
   };
 
@@ -177,17 +198,19 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
           style={{ backgroundColor: 'rgba(106, 53, 255, 0.52)' }}
         >
           <p className="font-poppins text-[11px] sm:text-[12px] leading-[15px] text-white tracking-wide">
-            Somos el equipo creativo que tu negocio necesita.
+            {isEs
+              ? 'Somos el equipo creativo que tu negocio necesita.'
+              : 'We are the creative team your business needs.'}
           </p>
         </div>
       </div>
 
-      {/* 3. Right Tilted Portfolio Collage with 3D Entrance + Mouse Parallax (Layer 27: imagerola.png) */}
+      {/* 3. Right Tilted Portfolio Collage with 3D Entrance + Smooth Mouse Parallax */}
       <div
         className="absolute right-[-8%] sm:right-[-4%] lg:left-[38%] lg:right-auto top-[34px] w-[95%] sm:w-[78%] lg:w-[1005px] h-[820px] pointer-events-none z-10 animate-rev-collage-3d"
       >
         <div
-          className="w-full h-full transition-transform duration-300 ease-out"
+          className="w-full h-full transition-transform duration-500 ease-out will-change-transform"
           style={{
             transform: `perspective(1200px) translate3d(${(parallax.x * -24).toFixed(1)}px, ${(
               parallax.y * -18
@@ -240,7 +263,7 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
           </a>
         </div>
 
-        {/* Bottom Overlay Row: Left Giant Gloock Title + VER SERVICIOS | Right Inter Manifesto + PORTAFOLIO ↘ */}
+        {/* Bottom Overlay Row: Left Giant Gloock Title + VIEW SERVICES | Right Inter Manifesto + PORTFOLIO ↘ */}
         <div className="w-full flex flex-col lg:flex-row lg:items-end justify-between gap-10 lg:gap-8 mt-auto pt-24">
           {/* Bottom-Left Column */}
           <div className="max-w-[720px]">
@@ -261,22 +284,24 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
                 href="#servicios"
                 className="inline-block font-josefin text-[13px] sm:text-[14px] font-normal uppercase tracking-[2px] text-white hover:text-white/80 transition-opacity"
               >
-                VER SERVICIOS
+                {isEs ? 'VER SERVICIOS' : 'VIEW SERVICES'}
               </a>
             </div>
           </div>
 
           {/* Bottom-Right Column */}
-          <div className="flex flex-col items-start lg:items-end text-left lg:text-right max-w-[380px] lg:ml-auto">
+          <div className="flex flex-col items-start lg:items-end text-left lg:text-right max-w-[385px] lg:ml-auto">
             <p className="font-inter text-[15px] sm:text-[16px] lg:text-[17px] leading-[25px] lg:leading-[26px] tracking-[0.9px] text-white/95 font-normal animate-rev-fade-1">
-              Creamos experiencias digitales que despiertan ambición, cautivan corazones conspiramos a favor de tus metas.
+              {isEs
+                ? 'Creamos experiencias digitales que despiertan ambición, cautivan corazones y conspiramos a favor de tus metas.'
+                : 'We create digital experiences that awaken ambition, captivate hearts, and conspire in favor of your goals.'}
             </p>
 
             <a
               href="#portafolio"
               className="mt-8 lg:mt-10 inline-flex items-center gap-3 font-josefin text-[16px] sm:text-[17px] font-semibold uppercase tracking-[1px] text-white hover:text-white/80 transition-transform duration-300 hover:translate-x-1 animate-rev-fade-2"
             >
-              <span>PORTAFOLIO</span>
+              <span>{isEs ? 'PORTAFOLIO' : 'PORTFOLIO'}</span>
               <span
                 aria-hidden="true"
                 className="inline-block text-[20px] leading-none font-light transform rotate-45"

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Language } from '../types';
-import { portfolioItems } from '../content/siteContent';
+import { portfolioItems, portfolioItemsEs } from '../content/siteContent';
 
 interface PortfolioSectionProps {
   lang: Language;
@@ -8,41 +8,68 @@ interface PortfolioSectionProps {
 
 export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ lang }) => {
   const isEs = lang === 'es';
+  const items = isEs ? portfolioItemsEs : portfolioItems;
   const cardRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const [cardTransforms, setCardTransforms] = useState<{ scale: number; blur: number }[]>(
-    () => portfolioItems.map(() => ({ scale: 1, blur: 0 }))
+    () => items.map(() => ({ scale: 1, blur: 0 }))
   );
+  const targetOverlapsRef = useRef<number[]>(items.map(() => 0));
+  const currentOverlapsRef = useRef<number[]>(items.map(() => 0));
+  const rafRef = useRef<number | null>(null);
+
   const [cursor, setCursor] = useState<{ x: number; y: number; active: boolean }>({
     x: 0,
     y: 0,
     active: false,
   });
 
-  // Salient stacking_effect="blurred_scale" physics
+  // Salient stacking_effect="blurred_scale" physics with smooth Lenis-style lerp interpolation
   useEffect(() => {
+    const animateStep = () => {
+      let needsMore = false;
+      const nextOverlaps = currentOverlapsRef.current.map((curr, idx) => {
+        const target = targetOverlapsRef.current[idx] || 0;
+        const diff = target - curr;
+        if (Math.abs(diff) > 0.001) {
+          needsMore = true;
+          return curr + diff * 0.18;
+        }
+        return target;
+      });
+
+      currentOverlapsRef.current = nextOverlaps;
+      setCardTransforms(
+        nextOverlaps.map((ov) => ({
+          scale: Number((1 - ov * 0.19).toFixed(4)),
+          blur: Number((ov * 5.2).toFixed(2)),
+        }))
+      );
+
+      if (needsMore) {
+        rafRef.current = window.requestAnimationFrame(animateStep);
+      } else {
+        rafRef.current = null;
+      }
+    };
+
     const handleScroll = () => {
-      const nextTransforms = portfolioItems.map((_, idx) => {
+      targetOverlapsRef.current = items.map((_, idx) => {
         const currentEl = cardRefs.current[idx];
         const nextEl = cardRefs.current[idx + 1];
-        if (!currentEl || !nextEl) {
-          return { scale: 1, blur: 0 };
-        }
+        if (!currentEl || !nextEl) return 0;
+
         const currRect = currentEl.getBoundingClientRect();
         const nextRect = nextEl.getBoundingClientRect();
         const cardH = currRect.height || 640;
 
-        // Calculate how far next card has slid over current sticky card
         const distance = nextRect.top - currRect.top;
-        if (distance >= cardH) {
-          return { scale: 1, blur: 0 };
-        }
-        const overlap = Math.max(0, Math.min(1, 1 - distance / cardH));
-        return {
-          scale: Number((1 - overlap * 0.19).toFixed(4)),
-          blur: Number((overlap * 5.2).toFixed(2)),
-        };
+        if (distance >= cardH) return 0;
+        return Math.max(0, Math.min(1, 1 - distance / cardH));
       });
-      setCardTransforms(nextTransforms);
+
+      if (rafRef.current === null) {
+        rafRef.current = window.requestAnimationFrame(animateStep);
+      }
     };
 
     handleScroll();
@@ -51,8 +78,11 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ lang }) => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
     };
-  }, []);
+  }, [items]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     setCursor({
@@ -84,12 +114,12 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ lang }) => {
         }}
         className="pointer-events-none fixed top-0 left-0 z-50 hidden lg:flex w-[84px] h-[84px] rounded-full items-center justify-center font-dm text-[14px] font-medium text-white transition-[opacity,transform] duration-150 ease-out"
       >
-        View
+        {isEs ? 'Ver' : 'View'}
       </div>
 
       {/* 1-Column Sticky 80vh Stack with blurred_scale */}
       <div className="max-w-[1400px] mx-auto flex flex-col gap-[40px]">
-        {portfolioItems.map((item, idx) => {
+        {items.map((item, idx) => {
           const href = isEs ? `/es/portfolio/${item.slug}` : `/portfolio/${item.slug}`;
           const tf = cardTransforms[idx] || { scale: 1, blur: 0 };
 
@@ -105,7 +135,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ lang }) => {
                 filter: tf.blur > 0.05 ? `blur(${tf.blur}px)` : 'none',
                 zIndex: idx + 1,
               }}
-              className="group sticky top-[44px] lg:top-[56px] block w-full h-[68vh] sm:h-[76vh] lg:h-[80vh] max-h-[760px] rounded-[25px] overflow-hidden bg-[#141414] will-change-transform transition-shadow duration-300 shadow-[0_25px_70px_rgba(0,0,0,0.65)] lg:cursor-none"
+              className="group sticky top-[86px] lg:top-[96px] block w-full h-[68vh] sm:h-[76vh] lg:h-[80vh] max-h-[760px] rounded-[25px] overflow-hidden bg-[#141414] will-change-transform transition-shadow duration-300 shadow-[0_25px_70px_rgba(0,0,0,0.65)] lg:cursor-none"
             >
               {/* Full-Bleed Background Project Image */}
               <img
